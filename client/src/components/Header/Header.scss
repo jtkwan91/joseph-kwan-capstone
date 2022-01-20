@@ -3,6 +3,7 @@
   justify-content: center;
   flex-direction: column;
   padding: 1rem;
+  position: relative;
 
   &__top {
     display: flex;
@@ -17,6 +18,8 @@
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
+    position: absolute;
+    right: 0;
   }
   &__logo {
     width: 4rem;
