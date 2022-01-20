@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './Login.scss'
 
 function Login() {
@@ -18,6 +19,8 @@ function Login() {
 <button className='login__form-button'>login</button>
 
   </form>
+
+  <Link className='login__signup' to="/signup">New? Sign up here.</Link>
 </div>
   )
 }
