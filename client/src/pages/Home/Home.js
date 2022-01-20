@@ -1,10 +1,10 @@
 import React from 'react';
-import bgBottom from '../../assets/images/bg-bottom.png'
+import Login from '../../components/Login/Login';
 import './Home.scss'
 
 function Home() {
   return <div className='home'>
-      <img className='home__background' src={bgBottom} alt="background" />
+    <Login />
   </div>;
 }
 

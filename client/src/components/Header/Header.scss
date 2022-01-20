@@ -3,7 +3,7 @@
   justify-content: center;
   flex-direction: column;
   padding: 1rem;
-  background-image: url(../../assets/images/bg-plain.png);
+  position: relative;
 
   &__top {
     display: flex;
@@ -13,11 +13,15 @@
   &__title {
     width: 100%;
     text-align: center;
+    text-decoration: none;
+    color: black;
   }
   &__dropdown {
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
+    position: absolute;
+    right: 0;
   }
   &__logo {
     width: 4rem;
