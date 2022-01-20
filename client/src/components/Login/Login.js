@@ -16,7 +16,7 @@ function Login() {
   <label className='login__form-label' htmlFor="loginPassword">password:</label>
   <input className='login__form-input' type="text" name='loginPassword' id='loginPassword'/>
 
-<button className='login__form-button'>login</button>
+  <button className='login__form-button'>login</button>
 
   </form>
 
