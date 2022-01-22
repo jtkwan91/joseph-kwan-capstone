@@ -1,0 +1,9 @@
+.handbook {
+  width: 100vw;
+  height: 50vh;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+  }
+}
