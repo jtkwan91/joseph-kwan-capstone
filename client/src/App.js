@@ -15,6 +15,7 @@ function App() {
   {/* <Route path="/characters/:id" element={} /> */}
   {/* <Route path="/characters/add" element={} /> */}
   {/* <Route path="/characters" element={} /> */}
+  {/* <Route path="/handbook" element={} */}
 </Routes>
 <Footer />
 </BrowserRouter>
