@@ -15,7 +15,7 @@ function Header() {
       </Link>
       <button className='header__dropdown'><img className='header__dropdown-img' src={dropdownIcon} alt="dropdown icon" onClick={() => setToggleDropdown(!toggleDropdown)}/></button>
       {toggleDropdown && (
-      <div className={`header__dropdown-menu`}>
+      <div className={`header__dropdown-menu fade-top`}>
         <Link className='header__dropdown-menu--item' to='/characters'>Character List</Link>
         <Link className='header__dropdown-menu--item' to='/handbook'>Player's Handbook</Link>
         <Link className='header__dropdown-menu--item' to='/'>Sign-out</Link>

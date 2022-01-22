@@ -1,3 +1,5 @@
+@use "../../util/mixins" as *;
+
 .header {
   display: flex;
   justify-content: center;
@@ -39,7 +41,7 @@
       position: absolute;
       right: 1rem;
       background-color: black;
-      top: 3.5rem;
+      top: 50px;
       border-radius: 4px;
 
       &--item {
@@ -51,6 +53,10 @@
         padding: 0.5rem 1rem;
         border-bottom: 1px solid white;
         border-radius: 4px;
+
+        &:last-child {
+          color: #e5303d;
+        }
       }
     }
   }
@@ -60,4 +66,8 @@
     align-self: center;
     margin-bottom: 0.75rem;
   }
+}
+
+.fade-top {
+  animation: animatetop 0.4s;
 }

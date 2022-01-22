@@ -11,3 +11,14 @@
     @content;
   }
 }
+
+@keyframes animatetop {
+  from {
+    top: 40px;
+    opacity: 0;
+  }
+  to {
+    top: 50px;
+    opacity: 1;
+  }
+}
