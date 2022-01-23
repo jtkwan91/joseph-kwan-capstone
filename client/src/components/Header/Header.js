@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import './Header.scss'
 import { Link } from 'react-router-dom'
 import chest from '../../assets/images/chest.png'
@@ -22,10 +22,10 @@ function Header() {
       </div>)}
       </div>
       <img className='header__logo' src={chest} alt="treasure-chest" />
-  </div>;
+  </div>
 }
 
-export default Header;
+export default Header
 
 const MyComponent = () => {
   const [toggle, setToggle] = useState(false)

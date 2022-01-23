@@ -9,4 +9,4 @@ function Handbook() {
   )
 }
 
-export default Handbook;
+export default Handbook
