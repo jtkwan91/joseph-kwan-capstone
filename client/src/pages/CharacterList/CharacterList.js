@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './CharacterList.scss'
 import trash from '../../assets/icons/trash.svg'
+import DeleteModal from '../../components/DeleteModal/DeleteModal'
+
 
 function CharacterList() {
+const [show, setShow] = useState(false)
+const handleDeleteModal = () => setShow(true)
+const closeModal = () => setShow(false)
+
 
   return <div className='char-list'>
       <button className='char-list__add'>+ NEW CHARACTER</button>
@@ -23,7 +29,8 @@ function CharacterList() {
         </div>
 
         <div className='char-list__card--right'>
-            <button className='char-list__card--right-button'><img className='char-list__card--right-image' src={trash} alt="trash icon" /></button>
+            <button className='char-list__card--right-button' onClick={handleDeleteModal}><img className='char-list__card--right-image' src={trash} alt="trash icon" /></button>
+            <DeleteModal closeModal={closeModal} show={show} />
         </div>
 
       </div>
