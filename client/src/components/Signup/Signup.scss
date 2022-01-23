@@ -1,3 +1,5 @@
+@use "../../util/mixins" as *;
+
 .signup {
   display: flex;
   justify-content: center;
@@ -27,6 +29,7 @@
       font-size: 12px;
       color: #210a02;
       padding: 0.1rem;
+      font-family: Dalelands;
     }
 
     &-label {
@@ -50,15 +53,9 @@
       color: #f2e24c;
     }
     &-button {
-      align-self: flex-end;
-      width: 3.75rem;
+      @include button;
       background-color: #f2e24c;
       color: #59478b;
-      border: hidden;
-      padding: 0.25rem;
-      border-radius: 0.625rem;
-      font-family: Scala;
-      font-weight: 600;
     }
   }
 

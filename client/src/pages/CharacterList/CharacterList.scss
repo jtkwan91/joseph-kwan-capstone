@@ -1,0 +1,100 @@
+@use "../../util/mixins" as *;
+
+.char-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 4px;
+
+  &__add {
+    @include button;
+    font-family: dalelands;
+    align-self: center;
+    width: 10rem;
+    height: 3rem;
+    border: 1px solid gold;
+    margin: 1rem 0;
+    color: gold;
+    background-color: black;
+
+    &:hover {
+      filter: brightness(1.5);
+    }
+  }
+
+  &__card {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    background-color: white;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+
+    &--left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 20%;
+
+      &-avatar {
+        width: 100px;
+        height: 100px;
+        background-color: grey;
+        border-radius: 50%;
+      }
+
+      &-level {
+        &-number {
+          width: 100%;
+          text-align: center;
+          padding-bottom: 0.25rem;
+          border-bottom: 1px solid black;
+        }
+      }
+    }
+
+    &--middle {
+      display: flex;
+      flex-wrap: wrap;
+
+      &-title {
+        width: 50%;
+        text-align: end;
+        align-self: flex-end;
+        padding-bottom: 0.25rem;
+      }
+      &-value {
+        align-self: flex-end;
+        width: 40%;
+        border-bottom: 1px solid black;
+        padding-left: 0.5rem;
+        padding-bottom: 0.25rem;
+      }
+    }
+    &--right {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      width: 20%;
+
+      &-button {
+        width: 50px;
+        height: 50px;
+        border: none;
+        background: none;
+
+        &:hover {
+          filter: brightness(0.5);
+        }
+      }
+      &-image {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+}

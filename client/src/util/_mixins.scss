@@ -22,3 +22,13 @@
     opacity: 1;
   }
 }
+
+@mixin button {
+  align-self: flex-end;
+  width: 3.75rem;
+  border: hidden;
+  padding: 0.25rem;
+  border-radius: 0.625rem;
+  font-family: Scala;
+  font-weight: 600;
+}

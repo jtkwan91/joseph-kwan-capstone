@@ -4,6 +4,7 @@ import Home from './pages/Home/Home'
 import Footer from './components/Footer/Footer'
 import Signup from './components/Signup/Signup'
 import Handbook from './components/Handbook/Handbook'
+import CharacterList from './pages/CharacterList/CharacterList'
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
   <Route path="/signup" element={<Signup />} />
   {/* <Route path="/characters/:id" element={} /> */}
   {/* <Route path="/characters/add" element={} /> */}
-  {/* <Route path="/characters" element={} /> */}
+  <Route path="/characters" element={<CharacterList />} />
   <Route path="/handbook" element={<Handbook />} />
 </Routes>
 <Footer />
