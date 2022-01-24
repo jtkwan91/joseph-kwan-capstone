@@ -5,17 +5,21 @@
   flex-direction: column;
   align-items: center;
   border-radius: 4px;
+  margin: 0 1rem;
 
   &__add {
     @include button;
     font-family: dalelands;
     align-self: center;
-    width: 10rem;
+    width: 12rem;
     height: 3rem;
     border: 1px solid gold;
     margin: 1rem 0;
     color: gold;
     background-color: black;
+    text-decoration: none;
+    text-align: center;
+    padding: 1rem 0;
 
     &:hover {
       filter: brightness(1.5);

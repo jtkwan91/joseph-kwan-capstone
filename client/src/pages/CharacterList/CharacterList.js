@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
+import{ Link } from 'react-router-dom'
 import './CharacterList.scss'
 import trash from '../../assets/icons/trash.svg'
 import DeleteModal from '../../components/DeleteModal/DeleteModal'
 
-
 function CharacterList() {
+
 const [show, setShow] = useState(false)
+
 const handleDeleteModal = () => setShow(true)
 const closeModal = () => setShow(false)
 
 
   return <div className='char-list'>
-      <button className='char-list__add'>+ NEW CHARACTER</button>
+      <Link to='/characters/add' className='char-list__add'>+ NEW CHARACTER</Link>
 
       <div className='char-list__card'>
 

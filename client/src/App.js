@@ -5,6 +5,7 @@ import Footer from './components/Footer/Footer'
 import Signup from './components/Signup/Signup'
 import Handbook from './components/Handbook/Handbook'
 import CharacterList from './pages/CharacterList/CharacterList'
+import CreateCharacter from './components/CreateCharacter/CreateCharacter'
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
   <Route path="/" element={<Home />} />
   <Route path="/signup" element={<Signup />} />
   {/* <Route path="/characters/:id" element={} /> */}
-  {/* <Route path="/characters/add" element={} /> */}
+  <Route path="/characters/add" element={<CreateCharacter />} />
   <Route path="/characters" element={<CharacterList />} />
   <Route path="/handbook" element={<Handbook />} />
 </Routes>

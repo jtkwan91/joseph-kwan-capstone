@@ -2,26 +2,23 @@
 
 .header {
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 1rem;
+  justify-content: space-between;
   position: relative;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #e5303d;
 
-  &__top {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
   &__title {
+    font-family: Draconis;
+    font-size: 32px;
     text-align: center;
     text-decoration: none;
-    color: #e5303d;
+    color: white;
+    text-shadow: 1px 1px black;
   }
   &__dropdown {
     margin-right: 1rem;
-    position: absolute;
-    right: 0;
     border: none;
     background: none;
 
@@ -41,7 +38,7 @@
       position: absolute;
       right: 1rem;
       background-color: black;
-      top: 50px;
+      top: 4rem;
       border-radius: 4px;
 
       &--item {
@@ -61,10 +58,8 @@
     }
   }
   &__logo {
-    width: 6rem;
-    height: 6rem;
-    align-self: center;
-    margin-bottom: 0.75rem;
+    width: 4rem;
+    height: 4rem;
   }
 }
 

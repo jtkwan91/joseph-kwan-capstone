@@ -2,7 +2,7 @@ import React from 'react'
 import './DeleteModal.scss'
 
 function DeleteModal(props) {
-    const { show, closeModal } = props;
+    const { show, closeModal } = props
 
   return     <>
     <div className={show ? "delete__overlay" : "hide"}>
