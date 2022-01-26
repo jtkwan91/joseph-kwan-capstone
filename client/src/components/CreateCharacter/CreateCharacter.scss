@@ -6,11 +6,38 @@
   border-radius: 4px;
   margin: 0 1rem;
   box-shadow: 1px 1px 1px 1px;
+  z-index: -2;
+
+  &__hex {
+    width: 50px;
+    height: 50px;
+  }
 
   &__form {
     display: flex;
     flex-direction: column;
     padding: 1rem;
+    z-index: -99999;
+
+    &--hp {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      &-num {
+        width: 50px;
+        height: 50px;
+        border: 2px solid grey;
+        border-radius: 10px;
+      }
+      &-button {
+        height: 40px;
+        width: 40px;
+        padding: 0;
+        border-radius: 50%;
+      }
+    }
 
     &--titles {
       font-family: Dalelands;
@@ -59,7 +86,17 @@
   &__abilities {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    align-items: center;
+    position: relative;
+    height: 50px;
+
+    &--hexes {
+      position: absolute;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      z-index: 1;
+    }
 
     &--title {
       font-family: Dalelands;
@@ -72,10 +109,14 @@
       justify-content: center;
       width: 50px;
       height: 50px;
-      border-radius: 50%;
-      border: 1px solid black;
       text-align: center;
       font-size: 2rem;
+      z-index: 2;
+      background: transparent;
+
+      &:focus {
+        outline: none;
+      }
 
       &-text {
         display: flex;
@@ -91,13 +132,4 @@
       }
     }
   }
-}
-
-// https://css-tricks.com/snippets/css/turn-off-number-input-spinners/
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  margin: 0;
 }
