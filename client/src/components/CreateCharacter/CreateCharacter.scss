@@ -11,31 +11,63 @@
   &__hex {
     width: 50px;
     height: 50px;
+    position: relative;
+
+    &--modifier {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      background-color: #19a974;
+      border-radius: 50%;
+      color: white;
+      line-height: 25px;
+      text-align: center;
+      height: 25px;
+      width: 25px;
+    }
   }
 
   &__form {
     display: flex;
     flex-direction: column;
     padding: 1rem;
+    background-color: #fffceb;
     z-index: -99999;
+
+    &--top {
+      display: flex;
+      flex-wrap: wrap;
+
+      &-name {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
+      }
+    }
 
     &--hp {
       display: flex;
       justify-content: space-evenly;
       align-items: center;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
 
       &-num {
+        text-align: center;
         width: 50px;
         height: 50px;
         border: 2px solid grey;
         border-radius: 10px;
+        font-size: 24px;
       }
       &-button {
         height: 40px;
         width: 40px;
         padding: 0;
-        border-radius: 50%;
+        border-radius: 4px;
+        font-family: Scala;
+        font-size: 1rem;
       }
     }
 
@@ -49,7 +81,18 @@
       height: 2rem;
       border-radius: 20px;
       padding: 0 2rem;
-      margin-bottom: 1rem;
+      border: 1px solid black;
+
+      &:nth-child(2) {
+        align-self: center;
+        width: 100%;
+      }
+    }
+
+    &--modifiers {
+      display: flex;
+      justify-content: space-between;
+      color: rgb(22, 184, 1);
     }
     &--buttons {
       display: flex;
@@ -77,8 +120,8 @@
       height: 50px;
       width: 120px;
       background-color: black;
-      color: gold;
-      border: 1px solid gold;
+      color: #ffb700;
+      border: 1px solid #ffb700;
       margin-left: 1rem;
     }
   }
@@ -110,7 +153,7 @@
       width: 50px;
       height: 50px;
       text-align: center;
-      font-size: 2rem;
+      font-size: 1.25rem;
       z-index: 2;
       background: transparent;
 
@@ -131,5 +174,31 @@
         text-align: center;
       }
     }
+  }
+}
+
+.upload {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  &__input {
+    display: none;
+  }
+  &__preview {
+    object-fit: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 2px solid #ffb700;
+    background: white;
+    padding: 1rem;
+    font-family: Scala;
   }
 }

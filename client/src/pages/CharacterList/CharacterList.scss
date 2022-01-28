@@ -13,9 +13,9 @@
     align-self: center;
     width: 12rem;
     height: 3rem;
-    border: 1px solid gold;
+    border: 1px solid #ffb700;
     margin: 1rem 0;
-    color: gold;
+    color: #ffb700;
     background-color: black;
     text-decoration: none;
     text-align: center;
@@ -45,8 +45,8 @@
       width: 20%;
 
       &-avatar {
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
         background-color: grey;
         border-radius: 50%;
       }

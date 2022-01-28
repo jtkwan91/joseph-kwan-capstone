@@ -1,20 +1,51 @@
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import hex from '../../assets/images/hexagon.svg'
 import './CreateCharacter.scss'
 const API_URL = `https://www.dnd5eapi.co`
 
+function reshapeAbilityBonus(t) {
+    return { [t.ability_score.index]: t.bonus }
+}
+
+function reshapeAbilityBonuses(a) {
+    return Object.assign(...a.map(reshapeAbilityBonus)) // without using reduce
+}
+
+function computeModifier(ability=0, bonus=0) {
+    const total = ability + bonus
+    if(total < 10)
+    return Math.floor((10-total)/-2)
+    else 
+    return Math.floor((total-10)/2)
+}
+
+// function onChange(e) {
+//     const file = e.target.files[0]
+//     const reader = new FileReader()
+//     reader.onload = function(e) {
+//       // The file's text will be printed here
+//       console.log(e.target.result)
+//     }
+  
+//     reader.readAsText(file)
+//   }
+
 function CreateCharacter() {
 
     const [races, setRaces] = useState([])
     const [raceSelection, setRaceSelection] = useState("")
+    const [subraceSelection, setSubraceSelection] = useState("")
     const [subRaces, setSubRaces] = useState([])
     const [charClasses, setCharClasses] = useState([])
     const [classSelection, setClassSelection] = useState("")
     const [subclasses, setSubClasses] = useState([])
     const [backgrounds, setBackgrounds] =useState([])
-    const [abilities, setAbilities] = useState({ str:0, dex:0, con:0, wis:0, int:0, cha:0 })
+    const [abilities, setAbilities] = useState({ str:10, dex:10, con:10, wis:10, int:10, cha:10 })
+    const [bonuses, setBonuses] = useState({})
+    const [hitdie, setHitdie] = useState(null)
+    const [hp, setHp] = useState(0)
 
     const setAbility = ability => (e) => {
         const n = Number.parseInt(e.target.value)
@@ -24,6 +55,21 @@ function CreateCharacter() {
             setAbilities({...abilities, [ability]:99})
         else
             setAbilities({...abilities, [ability]:n})
+    }
+
+    const handleAvg = (e) => {
+        e.preventDefault()
+        setHp(Math.floor(hitdie/2) + computeModifier(abilities.con, bonuses.con))
+    }
+    
+    const handleMax = (e) => {
+        e.preventDefault()
+        setHp(Math.floor(hitdie) + computeModifier(abilities.con, bonuses.con))
+    }
+    
+    const handleRoll = (e) => {
+        e.preventDefault()
+        setHp(Math.floor(Math.random() * hitdie) + 1 + computeModifier(abilities.con, bonuses.con)) 
     }
 
     const fetchData = () => {
@@ -40,28 +86,49 @@ function CreateCharacter() {
             setBackgrounds(response.data)
         })
       }
-
+      
     useEffect(() => {
         if(raceSelection === "") return
         axios.get(`${API_URL}/api/races/${raceSelection}`)
         .then((response) => {
+            setSubraceSelection('')
             setSubRaces(response.data.subraces)
+            setBonuses(reshapeAbilityBonuses(response.data.ability_bonuses))
         })
     },[raceSelection])
+        
+    useEffect(() => {
+        if(subraceSelection === "") return
+        axios.get(`${API_URL}/api/subraces/${subraceSelection}`)
+        .then((response) => {
+            setBonuses(m => {
+                return {...m, ...reshapeAbilityBonuses(response.data.ability_bonuses)}
+            })
+        })
+    },[subraceSelection])
 
     useEffect(() => {
         if(classSelection === "") return
         axios.get(`${API_URL}/api/classes/${classSelection}`)
         .then((response) => {
+            console.log("hit die: ", response.data.hit_die)
             setSubClasses(response.data.subclasses)
+            setHitdie(response.data.hit_die)
         })
     },[classSelection])
 
     useEffect(fetchData,[])
-
+ 
   return (
   <div className='create'>
-    <div className='create__form'>
+    <form className='create__form'>
+        <div className='create__form--top'>
+            <Upload />
+            <div className='create__form--top-name'>
+            <label htmlFor="Name" className='create__form--titles'>Name</label>
+            <input type="text" id='Name' className='create__form--select'/> 
+            </div>
+        </div>
 
         <label htmlFor="Race" className="create__form--titles">Race</label>
         <select name="Race" id="Race" className="create__form--select" value={raceSelection} onChange={e => setRaceSelection(e.target.value)}>
@@ -74,7 +141,8 @@ function CreateCharacter() {
         </select>
 
         <label htmlFor="SubRace" className="create__form--titles">Sub Race</label>
-        <select name="SubRace" id="SubRace" className="create__form--select" disabled={raceSelection === ""}>
+        <select name="SubRace" id="SubRace" className="create__form--select" value={subraceSelection} disabled={raceSelection === ''} onChange={e => setSubraceSelection(e.target.value)}>
+        <option value="" className="create__form--select-item" >--Please select a subrace--</option>
                 {subRaces.map((subrace) => {
                     return(
                         <option key={subrace.index} value={subrace.index}>{subrace.name}</option>
@@ -116,12 +184,12 @@ function CreateCharacter() {
 
         <div className='create__abilities'>
             <div className='create__abilities--hexes'>
-            <img className='create__hex' src={hex} alt="hexagon" />
-            <img className='create__hex' src={hex} alt="hexagon" />
-            <img className='create__hex' src={hex} alt="hexagon" />
-            <img className='create__hex' src={hex} alt="hexagon" />
-            <img className='create__hex' src={hex} alt="hexagon" />
-            <img className='create__hex' src={hex} alt="hexagon" />
+            <Hexagon abilityBonus={bonuses.str}/>
+            <Hexagon abilityBonus={bonuses.dex}/>
+            <Hexagon abilityBonus={bonuses.con}/>
+            <Hexagon abilityBonus={bonuses.wis}/>
+            <Hexagon abilityBonus={bonuses.int}/>
+            <Hexagon abilityBonus={bonuses.cha}/>
             </div>
             <input className='create__abilities--scores' type='text' value={abilities.str} onChange={setAbility("str")}/>
             <input className='create__abilities--scores' type='text' value={abilities.dex} onChange={setAbility("dex")}/>            
@@ -139,12 +207,12 @@ function CreateCharacter() {
             <div className='create__abilities--scores-names'>INT</div>
             <div className='create__abilities--scores-names'>CHA</div>
         </div>
-
+            
         <div className="create__form--hp">
-            <div className='create__form--hp-num'></div>
-            <button className='create__form--hp-button'>avg</button>
-            <button className='create__form--hp-button'>max</button>
-            <button className='create__form--hp-button'>roll</button>
+            <input className='create__form--hp-num' value={hp} placeholder='HP'></input>
+            <button className='create__form--hp-button' onClick={handleAvg}>avg</button>
+            <button className='create__form--hp-button' onClick={handleMax}>max</button>
+            <button className='create__form--hp-button' onClick={handleRoll}>roll</button>
         </div>
 
         <div className='create__form--buttons'>
@@ -152,8 +220,76 @@ function CreateCharacter() {
             <button className='create__form--submit' type='submit'>Submit</button>    
         </div> 
 
-      </div>
+      </form>
   </div>
   )}
 
 export default CreateCharacter
+
+
+function Hexagon({abilityBonus=0}) {
+  return <div className='create__hex'>
+            <img src={hex} alt="hexagon" />
+            {abilityBonus === 0 
+            ? null 
+            : <div className='create__hex--modifier'>+{abilityBonus}</div>
+            }
+      </div>
+}
+
+function Upload() {
+    const [image, setImage] = useState();
+  const [preview, setPreview] = useState();
+  const fileInputRef = useRef();
+
+  useEffect(() => {
+    if (image) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(image);
+    } else {
+      setPreview(null);
+    }
+  }, [image]);
+
+  return (
+    <div className="upload">
+        {preview ? (
+          <img
+            className='upload__preview'
+            src={preview}
+            alt='preview'
+            onClick={() => {
+              setImage(null)
+            }}
+          />
+        ) : (
+          <button
+          className='upload__button'
+            onClick={(event) => {
+              event.preventDefault();
+              fileInputRef.current.click();
+            }}
+          >
+            Add Avatar
+          </button>
+        )}
+        <input
+          type="file"
+          className='upload__input'
+          ref={fileInputRef}
+          accept="image/*"
+          onChange={(event) => {
+            const file = event.target.files[0];
+            if (file && file.type.substring(0, 5) === "image") {
+              setImage(file);
+            } else {
+              setImage(null);
+            }
+          }}
+        />
+    </div>
+  )
+}
