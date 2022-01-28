@@ -180,12 +180,14 @@ function CreateCharacter() {
             <Hexagon abilityBonus={bonuses.int}/>
             <Hexagon abilityBonus={bonuses.cha}/>
             </div>
+            <div className='create__abilities--hexes'>
             <input className='create__abilities--scores' type='text' value={abilities.str} onChange={setAbility("str")}/>
             <input className='create__abilities--scores' type='text' value={abilities.dex} onChange={setAbility("dex")}/>            
             <input className='create__abilities--scores' type='text' value={abilities.con} onChange={setAbility("con")}/>            
             <input className='create__abilities--scores' type='text' value={abilities.wis} onChange={setAbility("wis")}/>            
             <input className='create__abilities--scores' type='text' value={abilities.int} onChange={setAbility("int")}/>            
             <input className='create__abilities--scores' type='text' value={abilities.cha} onChange={setAbility("cha")}/>
+            </div>
         </div>
 
         <div className='create__abilities--scores-text'>

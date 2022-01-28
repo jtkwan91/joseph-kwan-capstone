@@ -23,7 +23,7 @@
   }
   &__dropdown {
     margin-right: 1rem;
-    border: none;
+    border: 2px solid #ffb700;
     border-radius: 50%;
     background: #555555;
     width: 50px;
@@ -63,12 +63,6 @@
         border-bottom: 1px solid white;
         border-radius: 4px;
 
-        &:last-child {
-          color: #e7040f;
-          &:visited {
-            color: #e7040f;
-          }
-        }
         &:visited {
           color: white;
         }
@@ -83,4 +77,11 @@
 
 .fade-top {
   animation: animatetop 0.4s;
+}
+
+.signout {
+  color: #e7040f;
+  &:visited {
+    color: #e7040f;
+  }
 }

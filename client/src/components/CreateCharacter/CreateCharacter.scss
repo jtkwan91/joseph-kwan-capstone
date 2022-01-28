@@ -1,13 +1,8 @@
 @use "../../styles/mixins.scss" as *;
 
 .create {
-  background: border-box no-repeat url(../../assets/images/bg-plain.png);
-  border: 1px solid #555555;
-  border-radius: 1rem;
-  margin: 0 1rem;
-  box-shadow: 5px 5px 2px 2px #555555;
-  z-index: -2;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
 
   &__hex {
     width: 50px;
@@ -32,7 +27,14 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    z-index: -99999;
+    background: border-box no-repeat url(../../assets/images/bg-plain.png);
+    border: 1px solid #555555;
+    border-radius: 1rem;
+    margin: 0 1rem;
+    box-shadow: 5px 5px 2px 2px #555555;
+    overflow: hidden;
+    width: 100%;
+    max-width: 786px;
 
     &--top {
       display: flex;
@@ -127,7 +129,7 @@
       width: 120px;
       background-color: #555555;
       color: #ffb700;
-      border: 1px solid #ffb700;
+      border: 2px solid #ffb700;
       margin-left: 1rem;
     }
   }
@@ -143,8 +145,10 @@
       position: absolute;
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
       width: 100%;
       z-index: 1;
+      margin-bottom: 1rem;
     }
 
     &--title {
@@ -170,6 +174,7 @@
       &-text {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         margin-bottom: 1rem;
       }
       &-names {

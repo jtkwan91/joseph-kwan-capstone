@@ -19,7 +19,7 @@ function Header() {
         <Link className='header__dropdown-menu--item' to='/characters' onClick={() => setToggleDropdown(!toggleDropdown)}>Character List</Link>
         <Link className='header__dropdown-menu--item' to='/handbook' onClick={() => setToggleDropdown(!toggleDropdown)}>Player's Handbook</Link>
         { currentUser
-        ? <Link className='header__dropdown-menu--item' to='/' onClick={() => setToggleDropdown(!toggleDropdown)}>Sign-out {currentUser.display_name}</Link>
+        ? <Link className='header__dropdown-menu--item signout' to='/' onClick={() => setToggleDropdown(!toggleDropdown)}>Sign-out {currentUser.display_name}</Link>
         : null
         }
       </div>)}
