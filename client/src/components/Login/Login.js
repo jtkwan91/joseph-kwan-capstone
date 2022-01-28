@@ -1,27 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { loginUser } from '../../Api'
 import './Login.scss'
 
 function Login() {
+  const [loginId, setLoginId] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    loginUser({email:loginId, password})
+    .then((response)=>{
+      console.log(response)
+      alert("logged in")
+      // to do: log the user in
+    })
+    .catch(() => {
+      alert("Invalid login id or password")
+    })
+  }
+
   return (
-<div className='login'>
+    <div className='login'>
 
-  <form className='login__form'>
+      <form className='login__form' onSubmit={handleSubmit}>
 
-  <div className='login__form-banner'>Login</div>
+      <div className='login__form-banner'>Login</div>
 
-  <label className='login__form-label' htmlFor="loginId">login ID:</label>
-  <input className='login__form-input' type="text" name="loginId" id="loginId" />
+      <label className='login__form-label' htmlFor="loginId">login ID:</label>
+      <input className='login__form-input' value={loginId} name="loginId" id="loginId" onChange={e => setLoginId(e.target.value)} />
 
-  <label className='login__form-label' htmlFor="loginPassword">password:</label>
-  <input className='login__form-input' type="text" name='loginPassword' id='loginPassword'/>
+      <label className='login__form-label' htmlFor="loginPassword">password:</label>
+      <input className='login__form-input' value={password} type="password" name='loginPassword' id='loginPassword' onChange={e => setPassword(e.target.value)} />
 
-  <button className='login__form-button'>login</button>
+      <button className='login__form-button'>login</button>
 
-  </form>
+      </form>
 
-  <Link className='login__signup' to="/signup">New? Sign up here.</Link>
-</div>
+      <Link className='login__signup' to="/signup">New? Sign up here.</Link>
+    </div>
   )
 }
 
