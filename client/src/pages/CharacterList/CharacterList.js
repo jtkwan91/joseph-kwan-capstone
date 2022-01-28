@@ -15,8 +15,8 @@ const closeModal = () => setShow(false)
   return <div className='char-list'>
       <Link to='/characters/add' className='char-list__add'>+ NEW CHARACTER</Link>
 
+        <Link to='/'>
       <div className='char-list__card'>
-
         <div className='char-list__card--left'>
               <div className='char-list__card--left-avatar' src="" alt=""></div>
               <h2 className='char-list__card--left-level'>LVL</h2>
@@ -33,9 +33,9 @@ const closeModal = () => setShow(false)
         <div className='char-list__card--right'>
             <button className='char-list__card--right-button' onClick={handleDeleteModal}><img className='char-list__card--right-image' src={trash} alt="trash icon" /></button>
             <DeleteModal closeModal={closeModal} show={show} />
-        </div>
-
+        </div> 
       </div>
+        </Link>
 
   </div>
 }

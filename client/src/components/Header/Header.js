@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './Header.scss'
 import { Link } from 'react-router-dom'
 import chest from '../../assets/images/chest.png'
-import dropdownIcon from '../../assets/icons/dropdown.png'
+import dropdownIcon from '../../assets/icons/dropdown.svg'
 
 function Header() {
 

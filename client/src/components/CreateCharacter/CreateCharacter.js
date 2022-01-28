@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import hex from '../../assets/images/hexagon.svg'
 import './CreateCharacter.scss'
+import upload from '../../assets/icons/upload.svg'
 const API_URL = `https://www.dnd5eapi.co`
 
 function reshapeAbilityBonus(t) {
@@ -21,17 +22,6 @@ function computeModifier(ability=0, bonus=0) {
     return Math.floor((total-10)/2)
 }
 
-// function onChange(e) {
-//     const file = e.target.files[0]
-//     const reader = new FileReader()
-//     reader.onload = function(e) {
-//       // The file's text will be printed here
-//       console.log(e.target.result)
-//     }
-  
-//     reader.readAsText(file)
-//   }
-
 function CreateCharacter() {
 
     const [races, setRaces] = useState([])
@@ -44,7 +34,7 @@ function CreateCharacter() {
     const [backgrounds, setBackgrounds] =useState([])
     const [abilities, setAbilities] = useState({ str:10, dex:10, con:10, wis:10, int:10, cha:10 })
     const [bonuses, setBonuses] = useState({})
-    const [hitdie, setHitdie] = useState(null)
+    const [hitdie, setHitdie] = useState(0)
     const [hp, setHp] = useState(0)
 
     const setAbility = ability => (e) => {
@@ -59,17 +49,17 @@ function CreateCharacter() {
 
     const handleAvg = (e) => {
         e.preventDefault()
-        setHp(Math.floor(hitdie/2) + computeModifier(abilities.con, bonuses.con))
+        setHp(Math.max(1, Math.floor(hitdie/2) + computeModifier(abilities.con, bonuses.con)))
     }
     
     const handleMax = (e) => {
         e.preventDefault()
-        setHp(Math.floor(hitdie) + computeModifier(abilities.con, bonuses.con))
+        setHp(Math.max(1, Math.floor(hitdie) + computeModifier(abilities.con, bonuses.con)))
     }
     
     const handleRoll = (e) => {
         e.preventDefault()
-        setHp(Math.floor(Math.random() * hitdie) + 1 + computeModifier(abilities.con, bonuses.con)) 
+        setHp(Math.max(1, Math.floor(Math.random() * hitdie) + 1 + computeModifier(abilities.con, bonuses.con)))
     }
 
     const fetchData = () => {
@@ -111,7 +101,6 @@ function CreateCharacter() {
         if(classSelection === "") return
         axios.get(`${API_URL}/api/classes/${classSelection}`)
         .then((response) => {
-            console.log("hit die: ", response.data.hit_die)
             setSubClasses(response.data.subclasses)
             setHitdie(response.data.hit_die)
         })
@@ -142,7 +131,7 @@ function CreateCharacter() {
 
         <label htmlFor="SubRace" className="create__form--titles">Sub Race</label>
         <select name="SubRace" id="SubRace" className="create__form--select" value={subraceSelection} disabled={raceSelection === ''} onChange={e => setSubraceSelection(e.target.value)}>
-        <option value="" className="create__form--select-item" >--Please select a subrace--</option>
+            <option value="">--Please select a subrace--</option>
                 {subRaces.map((subrace) => {
                     return(
                         <option key={subrace.index} value={subrace.index}>{subrace.name}</option>
@@ -200,16 +189,17 @@ function CreateCharacter() {
         </div>
 
         <div className='create__abilities--scores-text'>
-            <div className='create__abilities--scores-names'>STR</div>
-            <div className='create__abilities--scores-names'>DEX</div>
-            <div className='create__abilities--scores-names'>CON</div>
-            <div className='create__abilities--scores-names'>WIS</div>
-            <div className='create__abilities--scores-names'>INT</div>
-            <div className='create__abilities--scores-names'>CHA</div>
+            <div className='create__abilities--scores-names'>STR <span>{computeModifier(abilities.str, bonuses.str)}</span></div>
+            <div className='create__abilities--scores-names'>DEX <span>{computeModifier(abilities.dex, bonuses.dex)}</span></div>
+            <div className='create__abilities--scores-names'>CON <span>{computeModifier(abilities.con, bonuses.con)}</span></div>
+            <div className='create__abilities--scores-names'>WIS <span>{computeModifier(abilities.wis, bonuses.wis)}</span></div>
+            <div className='create__abilities--scores-names'>INT <span>{computeModifier(abilities.int, bonuses.int)}</span></div>
+            <div className='create__abilities--scores-names'>CHA <span>{computeModifier(abilities.cha, bonuses.cha)}</span></div>
         </div>
-            
+
+        <label className='create__abilities--title' htmlFor="hp">HP <span className=''>- hit die = {hitdie}</span> </label>
         <div className="create__form--hp">
-            <input className='create__form--hp-num' value={hp} placeholder='HP'></input>
+            <input className='create__form--hp-num' id='hp' value={hp} placeholder='HP'></input>
             <button className='create__form--hp-button' onClick={handleAvg}>avg</button>
             <button className='create__form--hp-button' onClick={handleMax}>max</button>
             <button className='create__form--hp-button' onClick={handleRoll}>roll</button>
@@ -257,31 +247,20 @@ function Upload() {
   return (
     <div className="upload">
         {preview ? (
-          <img
-            className='upload__preview'
-            src={preview}
-            alt='preview'
-            onClick={() => {
+          <img className='upload__preview' src={preview} alt='preview' onClick={() => {
               setImage(null)
             }}
-          />
+        />
         ) : (
-          <button
-          className='upload__button'
-            onClick={(event) => {
-              event.preventDefault();
-              fileInputRef.current.click();
+          <button className='upload__button' onClick={(event) => { 
+              event.preventDefault(); fileInputRef.current.click()
             }}
           >
             Add Avatar
+            <img src={upload} alt="upload icon" />
           </button>
         )}
-        <input
-          type="file"
-          className='upload__input'
-          ref={fileInputRef}
-          accept="image/*"
-          onChange={(event) => {
+        <input type="file" className='upload__input' ref={fileInputRef} accept="image/*" onChange={(event) => {
             const file = event.target.files[0];
             if (file && file.type.substring(0, 5) === "image") {
               setImage(file);

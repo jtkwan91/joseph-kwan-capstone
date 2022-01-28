@@ -52,6 +52,10 @@
       margin-right: auto;
       text-decoration: none;
       color: #f2e24c;
+
+      &:visited {
+        color: #f2e24c;
+      }
     }
     &-button {
       @include button;
