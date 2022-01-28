@@ -2,9 +2,9 @@ import React from 'react'
 import Login from '../../components/Login/Login'
 import './Home.scss'
 
-function Home() {
+function Home({setCurrentUser}) {
   return <div className='home'>
-    <Login />
+    <Login setCurrentUser={setCurrentUser}/>
   </div>
 }
 

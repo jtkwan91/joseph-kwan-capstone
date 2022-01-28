@@ -37,7 +37,7 @@ router.post("/register", (req,res) => {
 router.post("/login", async (req, res) => {
     try{
         const user = await knex('users')
-        .select('email', 'hashed_password', 'display_name')
+        .select('id', 'email', 'hashed_password', 'display_name')
         .where({email: req.body.email})
         .first()
         console.log('user: ', user)
@@ -46,7 +46,7 @@ router.post("/login", async (req, res) => {
         else if (user.hashed_password !== hash(req.body.password))
         return res.status(401).send("invalid password")
         else 
-        return res.status(200).json({email:user.email, display_name:user.display_name})
+        return res.status(200).json({id: user.id, email: user.email, display_name: user.display_name})
     }
     catch(err) {
         return res.status(500).send(err.message)

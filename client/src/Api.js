@@ -9,5 +9,6 @@ export function registerUser({email, password, display}){
 export function loginUser({email, password}){
     return axios
     .post(`${serverUrl}/users/login`, {email, password})
+    .then((response) => response.data)
     // todo: if 401 status forward error response
 }

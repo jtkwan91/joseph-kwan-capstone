@@ -3,18 +3,15 @@ import { Link } from 'react-router-dom'
 import { loginUser } from '../../Api'
 import './Login.scss'
 
-function Login() {
+function Login({setCurrentUser}) {
+
   const [loginId, setLoginId] = useState("")
   const [password, setPassword] = useState("")
 
   const handleSubmit = (e) => {
     e.preventDefault()
     loginUser({email:loginId, password})
-    .then((response)=>{
-      console.log(response)
-      alert("logged in")
-      // to do: log the user in
-    })
+    .then(setCurrentUser)
     .catch(() => {
       alert("Invalid login id or password")
     })

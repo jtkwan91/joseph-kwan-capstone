@@ -3,6 +3,7 @@ import{ Link } from 'react-router-dom'
 import './CharacterList.scss'
 import trash from '../../assets/icons/trash.svg'
 import DeleteModal from '../../components/DeleteModal/DeleteModal'
+// todo import context 
 
 function CharacterList() {
 
