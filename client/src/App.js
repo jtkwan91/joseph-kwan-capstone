@@ -16,20 +16,20 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
-  console.log("current user: ", currentUser)
-  if(currentUser)
+  if(currentUser?.id)
   navigate("/characters")
-  }, [navigate, currentUser])
+  //todo current user dependacy shouldn't be an object
+  }, [currentUser?.id])
 
   return (<UserContext.Provider value={currentUser} >
     <Header />
     <Routes>
-    <Route path="/" element={<Home setCurrentUser={setCurrentUser}/>} />
     <Route path="/signup" element={<Signup />} />
     {/* <Route path="/characters/:id" element={} /> */}
     <Route path="/characters/add" element={<CreateCharacter />} />
     <Route path="/characters" element={<CharacterList />} />
     <Route path="/handbook" element={<Handbook />} />
+    <Route path="/" element={<Home setCurrentUser={setCurrentUser}/>} />
     </Routes>
     <Footer />
     </UserContext.Provider>

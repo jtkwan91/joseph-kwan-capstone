@@ -199,7 +199,7 @@ function CreateCharacter() {
 
         <label className='create__abilities--title' htmlFor="hp">HP <span className=''>- hit die = {hitdie}</span> </label>
         <div className="create__form--hp">
-            <input className='create__form--hp-num' id='hp' value={hp} placeholder='HP'></input>
+            <input className='create__form--hp-num' id='hp' value={hp} placeholder='HP' onChange={e => setHp(e.target.value)}></input>
             <button className='create__form--hp-button' onClick={handleAvg}>avg</button>
             <button className='create__form--hp-button' onClick={handleMax}>max</button>
             <button className='create__form--hp-button' onClick={handleRoll}>roll</button>
