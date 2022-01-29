@@ -7,11 +7,17 @@
   box-sizing: border-box;
 }
 
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 body {
   margin: 0;
   font-family: Scala;
   background-color: #fffceb;
-  background-size: 100% 100vh;
 }
 
 h1 {

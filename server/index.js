@@ -9,7 +9,7 @@ app.use(express.json())
 
 app.use("/backgrounds", require('./routes/backgrounds'))
 app.use("/users", require('./routes/users'))
-// app.use("/characters", charactersRoutes)
+app.use("/characters", require('./routes/characters'))
 
 
 app.listen(PORT, () => {

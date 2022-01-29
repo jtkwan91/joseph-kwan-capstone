@@ -28,6 +28,7 @@ function Signup() {
     return (
       <div className='signup'>
         <form className="signup__form" onSubmit={handleSubmit}>
+          
             <div className='signup__form-banner'>Sign up</div>
 
             <label className='signup__form-label' htmlFor="">e-mail:</label>

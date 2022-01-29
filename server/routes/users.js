@@ -40,7 +40,6 @@ router.post("/login", async (req, res) => {
         .select('id', 'email', 'hashed_password', 'display_name')
         .where({email: req.body.email})
         .first()
-        console.log('user: ', user)
         if (!user)
         return res.status(401).send("no user")
         else if (user.hashed_password !== hash(req.body.password))
@@ -51,6 +50,6 @@ router.post("/login", async (req, res) => {
     catch(err) {
         return res.status(500).send(err.message)
     }
-
 })
+
 module.exports = router

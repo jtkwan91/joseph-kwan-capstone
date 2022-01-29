@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import hex from '../../assets/images/hexagon.svg'
 import './CreateCharacter.scss'
 import upload from '../../assets/icons/upload.svg'
+import { addCharacter } from '../../Api'
 const API_URL = `https://www.dnd5eapi.co`
 
 function reshapeAbilityBonus(t) {
@@ -23,19 +24,43 @@ function computeModifier(ability=0, bonus=0) {
 }
 
 function CreateCharacter() {
-
+    const [charName, setCharName] = useState("")
     const [races, setRaces] = useState([])
     const [raceSelection, setRaceSelection] = useState("")
     const [subraceSelection, setSubraceSelection] = useState("")
     const [subRaces, setSubRaces] = useState([])
     const [charClasses, setCharClasses] = useState([])
     const [classSelection, setClassSelection] = useState("")
-    const [subclasses, setSubClasses] = useState([])
-    const [backgrounds, setBackgrounds] =useState([])
+    const [archetypes, setArchetypes] = useState([])
+    const [archetype, setArchetype] = useState("")
+    const [backgrounds, setBackgrounds] = useState([])
+    const [background, setBackground] = useState("")
     const [abilities, setAbilities] = useState({ str:10, dex:10, con:10, wis:10, int:10, cha:10 })
     const [bonuses, setBonuses] = useState({})
     const [hitdie, setHitdie] = useState(0)
     const [hp, setHp] = useState(0)
+    const [speed, setSpeed] = useState(0)
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        addCharacter({
+            charName, 
+            race:raceSelection, 
+            subrace:subraceSelection, 
+            char_class:classSelection,
+            abilities, 
+            archetype, 
+            background, 
+            hp, 
+            speed
+        })
+        .then((response) => {
+        alert("Character created")
+        })
+        .catch((err) => {
+        alert("Error creating character")
+        })
+      }
 
     const setAbility = ability => (e) => {
         const n = Number.parseInt(e.target.value)
@@ -84,6 +109,7 @@ function CreateCharacter() {
             setSubraceSelection('')
             setSubRaces(response.data.subraces)
             setBonuses(reshapeAbilityBonuses(response.data.ability_bonuses))
+            setSpeed(response.data.speed)
         })
     },[raceSelection])
         
@@ -101,7 +127,7 @@ function CreateCharacter() {
         if(classSelection === "") return
         axios.get(`${API_URL}/api/classes/${classSelection}`)
         .then((response) => {
-            setSubClasses(response.data.subclasses)
+            setArchetypes(response.data.subclasses)
             setHitdie(response.data.hit_die)
         })
     },[classSelection])
@@ -110,17 +136,17 @@ function CreateCharacter() {
  
   return (
   <div className='create'>
-    <form className='create__form'>
+    <form className='create__form' onSubmit={handleSubmit}>
         <div className='create__form--top'>
             <Upload />
             <div className='create__form--top-name'>
-            <label htmlFor="Name" className='create__form--titles'>Name</label>
-            <input type="text" id='Name' className='create__form--select'/> 
+            <label htmlFor="char_name" className='create__form--titles'>Name</label>
+            <input type="text" id='char_name' className='create__form--select' value={charName} onChange={e => setCharName(e.target.value)}/> 
             </div>
         </div>
 
-        <label htmlFor="Race" className="create__form--titles">Race</label>
-        <select name="Race" id="Race" className="create__form--select" value={raceSelection} onChange={e => setRaceSelection(e.target.value)}>
+        <label htmlFor="race" className="create__form--titles">Race</label>
+        <select name="race" id="race" className="create__form--select" value={raceSelection} onChange={e => setRaceSelection(e.target.value)}>
             <option value="" className="create__form--select-item" >--Please select a race--</option>
             {races.map((race) => {
                 return(
@@ -129,8 +155,8 @@ function CreateCharacter() {
             })}
         </select>
 
-        <label htmlFor="SubRace" className="create__form--titles">Sub Race</label>
-        <select name="SubRace" id="SubRace" className="create__form--select" value={subraceSelection} disabled={raceSelection === ''} onChange={e => setSubraceSelection(e.target.value)}>
+        <label htmlFor="subRace" className="create__form--titles">Sub Race</label>
+        <select name="subRace" id="subRace" className="create__form--select" value={subraceSelection} disabled={raceSelection === ''} onChange={e => setSubraceSelection(e.target.value)}>
             <option value="">--Please select a subrace--</option>
                 {subRaces.map((subrace) => {
                     return(
@@ -139,8 +165,8 @@ function CreateCharacter() {
                 })}
         </select>   
 
-        <label htmlFor="Class" className="create__form--titles">Class</label>
-        <select name="Class" id="Class" className="create__form--select" value={classSelection} onChange={e => setClassSelection(e.target.value)}>
+        <label htmlFor="char_class" className="create__form--titles">Class</label>
+        <select name="char_class" id="char_class" className="create__form--select" value={classSelection} onChange={e => setClassSelection(e.target.value)}>
             <option value="" className="create__form--select-item">--Please select a class--</option>
             {charClasses.map((c) => {
                 return(
@@ -149,18 +175,18 @@ function CreateCharacter() {
             })}
         </select>   
 
-        <label htmlFor="Archetype" className="create__form--titles">Archetype</label>
-        <select name="Archetype" id="Archetype" className="create__form--select" disabled={classSelection === ""}>
-        {
-        subclasses.map((s) => {
+        <label htmlFor="archetype" className="create__form--titles">Archetype</label>
+        <select name="archetype" id="archetype" className="create__form--select" value={archetype} disabled={classSelection === ""} onChange={e => setArchetype(e.target.value)}>
+        <option value="" className="create__form--select-item">--Please select an archetype--</option>
+        {archetypes.map((s) => {
                 return(
                     <option key={s.index} value={s.index} className="create__form--select-item">{s.name}</option>
                 )
             })}
         </select>
 
-        <label htmlFor="Background" className="create__form--titles">Background</label>
-        <select name="Background" id="Background" className="create__form--select">
+        <label htmlFor="background" className="create__form--titles">Background</label>
+        <select name="background" id="background" className="create__form--select" value={background} onChange={e => setBackground(e.target.value)}>
             <option value="" className="create__form--select-item">--Please select a background--</option>
             {backgrounds.map((b) => {
                 return(
@@ -169,39 +195,55 @@ function CreateCharacter() {
             })}
         </select>    
 
-        <label className='create__abilities--title'>Ability Scores</label>
+        <label className='create__form--titles'>Ability Scores</label>
 
         <div className='create__abilities'>
+
             <div className='create__abilities--hexes'>
-            <Hexagon abilityBonus={bonuses.str}/>
-            <Hexagon abilityBonus={bonuses.dex}/>
-            <Hexagon abilityBonus={bonuses.con}/>
-            <Hexagon abilityBonus={bonuses.wis}/>
-            <Hexagon abilityBonus={bonuses.int}/>
-            <Hexagon abilityBonus={bonuses.cha}/>
+            <div className='create__hex--item'>
+                <Hexagon abilityBonus={bonuses.str} abilities={abilities.str} bonuses={bonuses.str}/>
+                <input className='create__abilities--scores' type='text' value={abilities.str} onChange={setAbility("str")}/>
+                <div className='create__abilities--scores-names'>STR</div>
             </div>
+            <div className='create__hex--item'>
+                <Hexagon abilityBonus={bonuses.dex} abilities={abilities.dex} bonuses={bonuses.dex}/>
+                <input className='create__abilities--scores' type='text' value={abilities.dex} onChange={setAbility("dex")}/>            
+                <div className='create__abilities--scores-names'>DEX</div>
+            </div>
+
+            <div className='create__hex--item'>
+                <Hexagon abilityBonus={bonuses.con} abilities={abilities.con} bonuses={bonuses.con}/>
+                <input className='create__abilities--scores' type='text' value={abilities.con} onChange={setAbility("con")}/>            
+                <div className='create__abilities--scores-names'>CON</div>
+            </div>
+            </div>
+
             <div className='create__abilities--hexes'>
-            <input className='create__abilities--scores' type='text' value={abilities.str} onChange={setAbility("str")}/>
-            <input className='create__abilities--scores' type='text' value={abilities.dex} onChange={setAbility("dex")}/>            
-            <input className='create__abilities--scores' type='text' value={abilities.con} onChange={setAbility("con")}/>            
-            <input className='create__abilities--scores' type='text' value={abilities.wis} onChange={setAbility("wis")}/>            
-            <input className='create__abilities--scores' type='text' value={abilities.int} onChange={setAbility("int")}/>            
+
+            <div className='create__hex--item'>
+                <Hexagon abilityBonus={bonuses.wis} abilities={abilities.wis} bonuses={bonuses.wis}/>
+                <input className='create__abilities--scores' type='text' value={abilities.wis} onChange={setAbility("wis")}/>            
+                <div className='create__abilities--scores-names'>WIS</div>    
+            </div>
+
+            <div className='create__hex--item'>
+                <Hexagon abilityBonus={bonuses.int} abilities={abilities.int} bonuses={bonuses.int}/>
+                <input className='create__abilities--scores' type='text' value={abilities.int} onChange={setAbility("int")}/>            
+                <div className='create__abilities--scores-names'>INT</div>
+            </div>
+
+            <div className='create__hex--item'>
+            <Hexagon abilityBonus={bonuses.cha} abilities={abilities.cha} bonuses={bonuses.cha}/>
             <input className='create__abilities--scores' type='text' value={abilities.cha} onChange={setAbility("cha")}/>
+            <div className='create__abilities--scores-names'>CHA</div>
+            </div>
+
             </div>
         </div>
 
-        <div className='create__abilities--scores-text'>
-            <div className='create__abilities--scores-names'>STR <span>{computeModifier(abilities.str, bonuses.str)}</span></div>
-            <div className='create__abilities--scores-names'>DEX <span>{computeModifier(abilities.dex, bonuses.dex)}</span></div>
-            <div className='create__abilities--scores-names'>CON <span>{computeModifier(abilities.con, bonuses.con)}</span></div>
-            <div className='create__abilities--scores-names'>WIS <span>{computeModifier(abilities.wis, bonuses.wis)}</span></div>
-            <div className='create__abilities--scores-names'>INT <span>{computeModifier(abilities.int, bonuses.int)}</span></div>
-            <div className='create__abilities--scores-names'>CHA <span>{computeModifier(abilities.cha, bonuses.cha)}</span></div>
-        </div>
-
-        <label className='create__abilities--title' htmlFor="hp">HP <span className=''>- hit die = {hitdie}</span> </label>
+        <label className='create__form--titles' htmlFor="hp">HP<span className=''>- hit die = {hitdie}</span> </label>
         <div className="create__form--hp">
-            <input className='create__form--hp-num' id='hp' value={hp} placeholder='HP' onChange={e => setHp(e.target.value)}></input>
+            <input className='create__form--hp-num' name='hp' id='hp' value={hp} placeholder='HP' onChange={e => setHp(e.target.value)}></input>
             <button className='create__form--hp-button' onClick={handleAvg}>avg</button>
             <button className='create__form--hp-button' onClick={handleMax}>max</button>
             <button className='create__form--hp-button' onClick={handleRoll}>roll</button>
@@ -219,12 +261,13 @@ function CreateCharacter() {
 export default CreateCharacter
 
 
-function Hexagon({abilityBonus=0}) {
+function Hexagon({abilityBonus=0, abilities, bonuses}) {
   return <div className='create__hex'>
             <img src={hex} alt="hexagon" />
+            <span className='create__hex--modifier'>{computeModifier(abilities, bonuses)}</span>
             {abilityBonus === 0 
             ? null 
-            : <div className='create__hex--modifier'>+{abilityBonus}</div>
+            : <div className='create__hex--bonus'>+{abilityBonus}</div>
             }
       </div>
 }
