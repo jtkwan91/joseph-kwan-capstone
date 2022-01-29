@@ -1,44 +1,65 @@
-import React, { useState } from 'react'
-import{ Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import{ NavLink } from 'react-router-dom'
 import './CharacterList.scss'
 import trash from '../../assets/icons/trash.svg'
 import DeleteModal from '../../components/DeleteModal/DeleteModal'
+import { getCharacters } from '../../Api'
 // todo import context 
 
+
+
 function CharacterList() {
+  
+  const [characterList, setCharacterList] = useState([])
 
-const [show, setShow] = useState(false)
 
-const handleDeleteModal = () => setShow(true)
-const closeModal = () => setShow(false)
 
+useEffect(() => {
+  getCharacters()
+  .then(setCharacterList)
+  .catch((err) => {
+    console.error(err.mesasage)
+  })
+}, [])
 
   return <div className='char-list'>
-      <Link to='/characters/add' className='char-list__add'>+ NEW CHARACTER</Link>
-
-        <Link to='/'>
-      <div className='char-list__card'>
-        <div className='char-list__card--left'>
-              <div className='char-list__card--left-avatar' src="" alt=""></div>
-              <h2 className='char-list__card--left-level'>LVL</h2>
-              <h3 className='char-list__card--left-level-number'>7</h3>
-        </div>
-
-        <div className='char-list__card--middle'>
-            <h3 className='char-list__card--middle-title'>Name:</h3>         <span className='char-list__card--middle-value'>Kami</span>
-            <h3 className='char-list__card--middle-title'>Race:</h3>         <span className='char-list__card--middle-value'>Tabaxi</span>
-            <h3 className='char-list__card--middle-title'>Class(es):</h3>    <span className='char-list__card--middle-value'>Warrior</span>
-            <h3 className='char-list__card--middle-title'>Subclass:</h3>     <span className='char-list__card--middle-value'>Samurai</span>
-        </div>
-
-        <div className='char-list__card--right'>
-            <button className='char-list__card--right-button' onClick={handleDeleteModal}><img className='char-list__card--right-image' src={trash} alt="trash icon" /></button>
-            <DeleteModal closeModal={closeModal} show={show} />
-        </div> 
-      </div>
-        </Link>
-
+      <NavLink to='/add' className='char-list__add'>+ NEW CHARACTER</NavLink>
+      {characterList.map(char =>
+        <CharacterCard key={char.id} char={char} />
+      )}
   </div>
 }
 
 export default CharacterList
+
+function CharacterCard({char}) {
+console.log(char.avatar)
+  const [show, setShow] = useState(false)
+  const handleDeleteModal = () => setShow(true)
+  const closeModal = () => setShow(false)
+
+return(
+  <NavLink to='/' className='char-list__card'>
+  <div className='char-list__card--left'>
+    {char.avatar
+      ? <img className='char-list__card--left-avatar' src={char.avatar} alt="avatar" />
+      : <div className='char-list__card--left-avatar'></div>
+    }
+    <h2 className='char-list__card--left-level'>LVL</h2>
+    <h3 className='char-list__card--left-level-number'>1</h3>
+  </div>
+
+  <div className='char-list__card--middle'>
+      <h3 className='char-list__card--middle-title'>Name:</h3>         <span className='char-list__card--middle-value'>{char.name}</span>
+      <h3 className='char-list__card--middle-title'>Race:</h3>         <span className='char-list__card--middle-value'>{char.race}</span>
+      <h3 className='char-list__card--middle-title'>Class(es):</h3>    <span className='char-list__card--middle-value'>{char.class}</span>
+  </div>
+
+  <div className='char-list__card--right'>
+      <button className='char-list__card--right-button' onClick={handleDeleteModal}><img className='char-list__card--right-image' src={trash} alt="trash icon" /></button>
+      <DeleteModal closeModal={closeModal} show={show} char={char}/>
+  </div>
+</NavLink>
+)
+
+}

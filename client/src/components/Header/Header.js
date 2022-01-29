@@ -1,13 +1,27 @@
 import React, { useContext, useState } from 'react'
 import './Header.scss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import chest from '../../assets/images/chest.png'
 import dropdownIcon from '../../assets/icons/dropdown.svg'
 import { UserContext } from '../../Contexts'
+import { logoutUser } from '../../Api'
 
-function Header() {
+function Header({setCurrentUser}) {
+
   const currentUser = useContext(UserContext)
   const [toggleDropdown, setToggleDropdown] = useState(false)
+  const navigate = useNavigate()
+
+  const handleLogout = (e) => {
+    logoutUser()
+    .then(() => {
+      setCurrentUser(null)
+      navigate('/')
+    })
+    .catch((err) => {
+      console.error(err.message);
+    })
+  }
 
   return <div className='header'>
     
@@ -16,10 +30,10 @@ function Header() {
       <button className='header__dropdown'><img className='header__dropdown-img' src={dropdownIcon} alt="dropdown icon" onClick={() => setToggleDropdown(!toggleDropdown)}/></button>
       {toggleDropdown && (
       <div className={`header__dropdown-menu fade-top`}>
-        <Link className='header__dropdown-menu--item' to='/characters' onClick={() => setToggleDropdown(!toggleDropdown)}>Character List</Link>
+        <Link className='header__dropdown-menu--item' to='/' onClick={() => setToggleDropdown(!toggleDropdown)}>Character List</Link>
         <Link className='header__dropdown-menu--item' to='/handbook' onClick={() => setToggleDropdown(!toggleDropdown)}>Player's Handbook</Link>
         { currentUser
-        ? <Link className='header__dropdown-menu--item signout' to='/' onClick={() => setToggleDropdown(!toggleDropdown)}>Sign-out {currentUser.display_name}</Link>
+        ? <Link className='header__dropdown-menu--item signout' to='/' onClick={handleLogout}>Sign-out {currentUser.display_name}</Link>
         : null
         }
       </div>)}

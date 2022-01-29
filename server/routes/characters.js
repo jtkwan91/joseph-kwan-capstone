@@ -2,22 +2,44 @@ const express = require("express")
 const router = express.Router()
 const knex = require("knex")(require("../knexfile"))
 
+// router.get("/", (req,res) => {
+//     knex
+//     .select("*")
+//     .from("characters")
+//     .then((data) => {
+//         res.json(data)
+//     })
+//     .catch((err) => {
+//         res.status(500).send("Error getting chracters")
+//     })
+// })
+
 router.get("/", (req,res) => {
+    if (!req.session.userId)
+    return res.status(403).send('You must be logged in bud')
     knex
     .select("*")
     .from("characters")
-    .then((data) => {
-        res.json(data)
+    .where({
+        user_id: req.session.userId
     })
+    .then((data) => 
+        res.json(data.map(d => {
+            console.log(d);
+            return {...d, avatar: d.avatar? d.avatar.toString() : d.avatar}
+        })) 
+    )
     .catch((err) => {
-        res.status(500).send("Error getting chracters")
+        res.status(500).send("Error getting users")
     })
 })
 
 router.post("/add", (req,res) => {
-    console.log(req.body)
+    if(!req.session.userId) 
+    return res.status(403).send("You must be logged in bud")
     knex('characters')
     .insert({
+        user_id: req.session.userId,
         name: req.body.charName,
         avatar: req.body.avatar,
         race: req.body.race,

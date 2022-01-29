@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Login from '../../components/Login/Login'
 import './Home.scss'
+import { UserContext } from '../../Contexts'
+import CharacterList from '../CharacterList/CharacterList'
+
 
 function Home({setCurrentUser}) {
+
+  const currentUser = useContext(UserContext)
+
   return <div className='home'>
-    <Login setCurrentUser={setCurrentUser}/>
+    {currentUser
+    ? <CharacterList />
+    : <Login setCurrentUser={setCurrentUser}/>
+    }
+
   </div>
 }
 

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import hex from '../../assets/images/hexagon.svg'
 import './CreateCharacter.scss'
 import upload from '../../assets/icons/upload.svg'
@@ -24,6 +24,8 @@ function computeModifier(ability=0, bonus=0) {
 }
 
 function CreateCharacter() {
+
+    const [avatar, setAvatar] = useState(null)
     const [charName, setCharName] = useState("")
     const [races, setRaces] = useState([])
     const [raceSelection, setRaceSelection] = useState("")
@@ -41,10 +43,13 @@ function CreateCharacter() {
     const [hp, setHp] = useState(0)
     const [speed, setSpeed] = useState(0)
 
+    const navigate = useNavigate()
+
     const handleSubmit = (e) => {
         e.preventDefault()
         addCharacter({
             charName, 
+            avatar,
             race:raceSelection, 
             subrace:subraceSelection, 
             char_class:classSelection,
@@ -55,7 +60,7 @@ function CreateCharacter() {
             speed
         })
         .then((response) => {
-        alert("Character created")
+        navigate('/')
         })
         .catch((err) => {
         alert("Error creating character")
@@ -138,7 +143,7 @@ function CreateCharacter() {
   <div className='create'>
     <form className='create__form' onSubmit={handleSubmit}>
         <div className='create__form--top'>
-            <Upload />
+            <Upload avatar={avatar} setAvatar={setAvatar}/>
             <div className='create__form--top-name'>
             <label htmlFor="char_name" className='create__form--titles'>Name</label>
             <input type="text" id='char_name' className='create__form--select' value={charName} onChange={e => setCharName(e.target.value)}/> 
@@ -272,48 +277,33 @@ function Hexagon({abilityBonus=0, abilities, bonuses}) {
       </div>
 }
 
-function Upload() {
-    const [image, setImage] = useState();
-  const [preview, setPreview] = useState();
-  const fileInputRef = useRef();
+function Upload({avatar, setAvatar}) {
 
-  useEffect(() => {
-    if (image) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(image);
-    } else {
-      setPreview(null);
+    const fileInputRef = useRef()
+
+    const handleChange = (e) => {
+        const file = e.target.files[0]
+        if (file && file.type.substring(0, 5) !== "image") 
+        return alert('You must select an image type.  Bud.')
+        const reader = new FileReader()
+        reader.onloadend = () => setAvatar(reader.result)
+        reader.readAsDataURL(file)
     }
-  }, [image]);
+    const handleClick = (e) => {
+        e.preventDefault() 
+        fileInputRef.current.click()
+    }
 
-  return (
-    <div className="upload">
-        {preview ? (
-          <img className='upload__preview' src={preview} alt='preview' onClick={() => {
-              setImage(null)
-            }}
-        />
-        ) : (
-          <button className='upload__button' onClick={(event) => { 
-              event.preventDefault(); fileInputRef.current.click()
-            }}
-          >
-            Add Avatar
-            <img src={upload} alt="upload icon" />
-          </button>
-        )}
-        <input type="file" className='upload__input' ref={fileInputRef} accept="image/*" onChange={(event) => {
-            const file = event.target.files[0];
-            if (file && file.type.substring(0, 5) === "image") {
-              setImage(file);
-            } else {
-              setImage(null);
+    return <div className="upload">
+        <button className='upload__button' onClick={handleClick}>
+            { avatar
+            ?   <img src={avatar} alt="avatar" className='upload__preview'/>
+            :   <>
+                  Add Avatar
+                  <img src={upload} alt="upload icon" />
+                </>
             }
-          }}
-        />
-    </div>
-  )
+        </button>
+        <input type="file" className='upload__input' ref={fileInputRef} accept="image/*" onChange={handleChange}/>
+    </div> 
 }
