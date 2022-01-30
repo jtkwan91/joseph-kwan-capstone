@@ -35,8 +35,9 @@ router.post("/register", (req,res) => {
 
 router.post("/login", async (req, res) => {
     try{
-        const user = await knex('users')
+        const user = await knex
         .select('id', 'email', 'hashed_password', 'display_name')
+        .from('users')
         .where({email: req.body.email})
         .first()
         if (!user)

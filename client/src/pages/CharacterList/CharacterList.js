@@ -12,8 +12,6 @@ function CharacterList() {
   
   const [characterList, setCharacterList] = useState([])
 
-
-
 useEffect(() => {
   getCharacters()
   .then(setCharacterList)
@@ -33,13 +31,12 @@ useEffect(() => {
 export default CharacterList
 
 function CharacterCard({char}) {
-console.log(char.avatar)
   const [show, setShow] = useState(false)
   const handleDeleteModal = () => setShow(true)
   const closeModal = () => setShow(false)
 
 return(
-  <NavLink to='/' className='char-list__card'>
+  <NavLink to={`/${char.id}`} className='char-list__card'>
   <div className='char-list__card--left'>
     {char.avatar
       ? <img className='char-list__card--left-avatar' src={char.avatar} alt="avatar" />
@@ -50,9 +47,9 @@ return(
   </div>
 
   <div className='char-list__card--middle'>
-      <h3 className='char-list__card--middle-title'>Name:</h3>         <span className='char-list__card--middle-value'>{char.name}</span>
-      <h3 className='char-list__card--middle-title'>Race:</h3>         <span className='char-list__card--middle-value'>{char.race}</span>
-      <h3 className='char-list__card--middle-title'>Class(es):</h3>    <span className='char-list__card--middle-value'>{char.class}</span>
+      <span className='char-list__card--middle-value'>{char.name}</span>
+      <span className='char-list__card--middle-value'>{char.race_name}</span>
+      <span className='char-list__card--middle-value'>{char.class}</span>
   </div>
 
   <div className='char-list__card--right'>

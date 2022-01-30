@@ -9,7 +9,7 @@ function DeleteModal({ show, closeModal, char }) {
         <div className='delete__banner'>Delete</div>
         <button className='delete__x' onClick={closeModal}>X</button>
         <div className='delete__avatar'></div>
-        <h1 className='delete__header'>Delete {char.name}, the level 7 {char.class}?</h1>
+        <h1 className='delete__header'>Delete {char.name}, the level {char.level} {char.class}?</h1>
         <p className='delete__content'>Proceed to delete {char.name}.  This cannot be undone. </p>
         <div className='delete__buttons'>
         <button className='delete__accept'>Accept</button>

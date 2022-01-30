@@ -17,7 +17,7 @@
     border: 1px solid #ffb700;
     margin: 1rem 0;
     color: #ffb700;
-    background-color: #555555;
+    background-color: #666666;
     text-decoration: none;
     text-align: center;
     padding: 1rem 0;
@@ -37,10 +37,10 @@
     width: 100%;
     padding: 1rem;
     background: #fffceb;
-    border: 1px solid #555555;
+    border: 1px solid #666666;
     border-radius: 10px;
     margin-bottom: 1rem;
-    box-shadow: 5px 5px 2px 2px #555555;
+    box-shadow: 5px 5px 2px 2px #666666;
 
     &--left {
       display: flex;
@@ -52,7 +52,7 @@
       &-avatar {
         width: 50px;
         height: 50px;
-        background-color: #555555;
+        background-color: #666666;
         border: 2px solid #ffb700;
         border-radius: 50%;
       }

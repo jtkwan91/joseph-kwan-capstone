@@ -7,6 +7,7 @@ import Footer from './components/Footer/Footer'
 import Signup from './components/Signup/Signup'
 import Handbook from './components/Handbook/Handbook'
 import CreateCharacter from './components/CreateCharacter/CreateCharacter'
+import CharacterSheet from './pages/CharacterSheet/CharacterSheet'
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
     <Header setCurrentUser={setCurrentUser} />
     <Routes>
     <Route path="/signup" element={<Signup />} />
-    {/* <Route path="/:id" element={} /> */}
+    <Route path="/:id" element={<CharacterSheet />} />
     <Route path="/add" element={<CreateCharacter />} />
     <Route path="/handbook" element={<Handbook />} />
     <Route path="/" element={<Home setCurrentUser={setCurrentUser}/>} />

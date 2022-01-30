@@ -1,0 +1,46 @@
+.sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 4px;
+  margin: 0 1rem;
+  flex-grow: 1;
+
+  &__card {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+    background: #fffceb;
+    border: 1px solid #666666;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 5px 5px 2px 2px #666666;
+  }
+
+  &__details {
+    border: 1px solid black;
+    margin: 1rem;
+  }
+
+  &__core {
+    border: 1px solid black;
+    margin: 1rem;
+  }
+
+  &__abilities {
+    border: 1px solid black;
+    margin: 1rem;
+  }
+
+  &__wep-spells {
+    border: 1px solid black;
+    margin: 1rem;
+  }
+
+  &__misc {
+    border: 1px solid black;
+    margin: 1rem;
+  }
+}

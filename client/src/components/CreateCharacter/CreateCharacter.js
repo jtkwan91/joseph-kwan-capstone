@@ -57,7 +57,9 @@ function CreateCharacter() {
             archetype, 
             background, 
             hp, 
-            speed
+            speed,
+            level:1,
+            exp:0
         })
         .then((response) => {
         navigate('/')

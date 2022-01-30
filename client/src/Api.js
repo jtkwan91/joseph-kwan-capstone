@@ -32,3 +32,9 @@ export function getCharacters(){
     .get(`${serverUrl}/characters`)
     .then((response) => response.data)
 }
+
+export function getCharacter(id){
+    return client
+    .get(`${serverUrl}/characters/${id}`)
+    .then((response) => response.data)
+}

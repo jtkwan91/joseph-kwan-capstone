@@ -14,24 +14,46 @@ const knex = require("knex")(require("../knexfile"))
 //     })
 // })
 
+function withDecodeAvatar(char) {
+    return {...char, avatar: char.avatar? char.avatar.toString() : char.avatar}
+}
+
+function characterQuery() {
+    return knex
+    .select("characters.*","races.name as race_name")
+    .from("characters")
+    .join('races', 'races.id', '=', 'characters.race')
+}
+
 router.get("/", (req,res) => {
     if (!req.session.userId)
     return res.status(403).send('You must be logged in bud')
-    knex
-    .select("*")
-    .from("characters")
-    .where({
-        user_id: req.session.userId
-    })
-    .then((data) => 
-        res.json(data.map(d => {
-            console.log(d);
-            return {...d, avatar: d.avatar? d.avatar.toString() : d.avatar}
-        })) 
-    )
+    characterQuery()
+    .where({user_id: req.session.userId})
+    .then((data) => res.json(data.map(withDecodeAvatar)))
     .catch((err) => {
-        res.status(500).send("Error getting users")
+        res.status(500).send("Error getting characters")
     })
+})
+
+router.get("/:id", async (req, res) => {
+    if (!req.session.userId)
+        return res.status(403).send('You must be logged in bud')
+    try{
+        const char = await 
+        characterQuery()
+        .where({'characters.id': req.params.id})
+        .first()
+        if(!char)
+            return res.status(404).send('Error character not found')
+        if (char.user_id !== req.session.userId)
+            return res.status(403).send('Unauthorized access')
+        else
+            return res.json(withDecodeAvatar(char))
+    }
+    catch(err){
+        res.status(500).send('Error getting character')
+    }
 })
 
 router.post("/add", (req,res) => {
@@ -55,6 +77,8 @@ router.post("/add", (req,res) => {
         abi_cha: req.body.abilities.cha,
         max_hp: req.body.hp,
         speed: req.body.speed,
+        level: req.body.level,
+        exp: req.body.exp
     })
     .then(() => {
         res.status(201).send("ok")
