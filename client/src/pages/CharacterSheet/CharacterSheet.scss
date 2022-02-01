@@ -62,14 +62,15 @@
       padding: 1rem;
 
       &-title {
+        font-family: Dalelands;
         font-weight: 600;
-        color: red;
+        color: #e7040f;
       }
 
       &-input {
         height: 2rem;
         width: 6.25rem;
-        font-family: Dalelands;
+        font-family: Scala;
         font-size: 1rem;
       }
     }

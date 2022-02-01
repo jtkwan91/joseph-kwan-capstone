@@ -26,15 +26,16 @@ export function logoutUser() {
 }
 
 export function addCharacter(charData) {
-  return client.post(`${serverUrl}/characters/add`, charData)
+  return client.post(`${serverUrl}/characters`, charData)
 }
 
-export function delCharacter(char) {
-  return client.delete(`${serverUrl}/characters/delete`, char.id)
+export function delCharacter(id) {
+  return client.delete(`${serverUrl}/characters/${id}`)
 }
 
-export function getCharacters() {
-  return client.get(`${serverUrl}/characters`).then((response) => response.data)
+export async function getCharacters() {
+  const response = await client.get(`${serverUrl}/characters`)
+  return response.data
 }
 
 export function getCharacter(id) {

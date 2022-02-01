@@ -98,7 +98,7 @@ router.get("/:id/avatar", async (req, res) => {
   }
 })
 
-router.post("/add", (req, res) => {
+router.post("/", (req, res) => {
   if (!req.session.userId) return res.status(403).send("You must be logged in.")
   knex("characters")
     .insert({
@@ -131,9 +131,16 @@ router.post("/add", (req, res) => {
     })
 })
 
-router.delete("/delete", (req, res) => {
-  if (!req.session.userId) return res.status(403).send("You must be logged in.")
-  knex("characters").where("id", req.body.id).del()
+router.delete("/:id", async (req, res) => {
+  try {
+    if (!req.session.userId)
+      return res.status(403).send("You must be logged in.")
+    await knex("characters").where("id", req.params.id).del()
+    res.send("ok")
+  } catch (err) {
+    console.log("error:", err.message)
+    res.status(500)
+  }
 })
 
 module.exports = router

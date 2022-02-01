@@ -9,6 +9,7 @@ import { getCharacters } from "../../Api"
 
 function CharacterList() {
   const [characterList, setCharacterList] = useState([])
+  const [timestamp, setTimestamp] = useState(Date.now())
 
   useEffect(() => {
     getCharacters()
@@ -16,7 +17,11 @@ function CharacterList() {
       .catch((err) => {
         console.error(err.mesasage)
       })
-  }, [])
+  }, [timestamp])
+
+  const refresh = () => {
+    setTimestamp(Date.now())
+  }
 
   return (
     <div className="char-list">
@@ -24,7 +29,7 @@ function CharacterList() {
         + NEW CHARACTER
       </Link>
       {characterList.map((char) => (
-        <CharacterCard key={char.id} char={char} />
+        <CharacterCard key={char.id} char={char} refresh={refresh} />
       ))}
     </div>
   )
@@ -32,7 +37,7 @@ function CharacterList() {
 
 export default CharacterList
 
-function CharacterCard({ char }) {
+function CharacterCard({ char, refresh }) {
   const [show, setShow] = useState(false)
   const handleDeleteModal = () => setShow(true)
   const closeModal = () => setShow(false)
@@ -74,7 +79,12 @@ function CharacterCard({ char }) {
             alt="trash icon"
           />
         </button>
-        <DeleteModal closeModal={closeModal} show={show} char={char} />
+        <DeleteModal
+          closeModal={closeModal}
+          show={show}
+          char={char}
+          refresh={refresh}
+        />
       </div>
     </div>
   )
