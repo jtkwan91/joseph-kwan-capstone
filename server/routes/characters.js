@@ -21,6 +21,48 @@ const {
 //     })
 // })
 
+// "equipment": [
+//   {
+//     "equipment": {
+//       "index": "leather-armor",
+//       "name": "Leather Armor",
+//       "url": "/api/equipment/leather-armor"
+//     },
+//     "quantity": 1
+//   },
+//   {
+//     "equipment": {
+//       "index": "explorers-pack",
+//       "name": "Explorer's Pack",
+//       "url": "/api/equipment/explorers-pack"
+//     },
+//     "quantity": 1
+//   },
+
+function formatEquipment(equips) {
+  return JSON.stringify(equips.map((e) => e.equipment.name))
+}
+
+function formatTraits(traits) {
+  return JSON.stringify(traits.map((t) => t.name))
+}
+function formatProficiencies(profs) {
+  return JSON.stringify(profs.map((p) => p.name))
+}
+function formatLanguages(languages) {
+  return JSON.stringify(languages.map((l) => l.name))
+}
+
+function charToDb(char) {
+  return {
+    ...char,
+    equipment: formatEquipment(char.equipment),
+    traits: formatTraits(char.traits),
+    proficiencies: formatProficiencies(char.proficiencies),
+    languages: formatLanguages(char.languages),
+  }
+}
+
 async function withDependencies(char) {
   const [race, subrace, classData, archetype, background] = await Promise.all([
     getRace(char.race),
@@ -37,6 +79,10 @@ async function withDependencies(char) {
     class: classData,
     archetype: archetype,
     background: background,
+    traits: char.traits ? JSON.parse(char.traits) : [],
+    proficiencies: char.proficiencies ? JSON.parse(char.proficiencies) : [],
+    equipment: char.equipment ? JSON.parse(char.equipment) : [],
+    languages: char.languages ? JSON.parse(char.languages) : [],
   }
 }
 
@@ -101,32 +147,41 @@ router.get("/:id/avatar", async (req, res) => {
 router.post("/", (req, res) => {
   if (!req.session.userId) return res.status(403).send("You must be logged in.")
   knex("characters")
-    .insert({
-      user_id: req.session.userId,
-      name: req.body.charName,
-      avatar: req.body.avatar,
-      race: req.body.race,
-      subrace: req.body.subrace,
-      class: req.body.char_class,
-      archetype: req.body.archetype,
-      background: req.body.background,
-      abi_str: req.body.abilities.str,
-      abi_dex: req.body.abilities.dex,
-      abi_con: req.body.abilities.con,
-      abi_wis: req.body.abilities.wis,
-      abi_int: req.body.abilities.int,
-      abi_cha: req.body.abilities.cha,
-      current_hp: req.body.hp,
-      temp_hp: 0,
-      max_hp: req.body.hp,
-      speed: req.body.speed,
-      level: req.body.level,
-      exp: req.body.exp,
-    })
+    .insert(
+      charToDb({
+        user_id: req.session.userId,
+        name: req.body.charName,
+        avatar: req.body.avatar,
+        race: req.body.race,
+        subrace: req.body.subrace,
+        class: req.body.char_class,
+        archetype: req.body.archetype,
+        background: req.body.background,
+        abi_str: req.body.abilities.str,
+        abi_dex: req.body.abilities.dex,
+        abi_con: req.body.abilities.con,
+        abi_wis: req.body.abilities.wis,
+        abi_int: req.body.abilities.int,
+        abi_cha: req.body.abilities.cha,
+        current_hp: req.body.hp,
+        temp_hp: 0,
+        max_hp: req.body.hp,
+        speed: req.body.speed,
+        level: req.body.level,
+        exp: req.body.exp,
+        equipment: req.body.equipment,
+        traits: req.body.traits,
+        proficiencies: req.body.proficiencies,
+        languages: req.body.languages,
+        notes: null,
+      })
+    )
     .then(() => {
       res.status(201).send("ok")
     })
     .catch((err) => {
+      console.log(req.body.traits)
+      console.log(req.body.languages)
       res.status(500).send(err.message)
     })
 })

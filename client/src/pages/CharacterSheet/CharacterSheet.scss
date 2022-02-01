@@ -56,22 +56,22 @@
 
     &--element {
       display: flex;
-      justify-content: space-between;
       justify-content: center;
-      align-items: center;
+      flex-direction: column;
       padding: 1rem;
 
       &-title {
         font-family: Dalelands;
         font-weight: 600;
-        color: #e7040f;
       }
 
       &-input {
-        height: 2rem;
-        width: 6.25rem;
+        max-width: 12rem;
+        padding: 0.5rem;
+        text-align: start;
         font-family: Scala;
-        font-size: 1rem;
+        font-size: 1.25rem;
+        border: 1px solid #ffb700;
       }
     }
   }
@@ -112,6 +112,35 @@
     margin: 1rem;
     position: relative;
     border-radius: 4px;
+
+    &--label {
+      font-weight: 700;
+    }
+
+    &--info {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &--lists {
+      display: flex;
+      flex-direction: column;
+      width: 45%;
+    }
+  }
+  &__notes {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+    &--label {
+      font-weight: 700;
+    }
+
+    &--textarea {
+      height: 100%;
+      resize: none;
+    }
   }
 }
 
@@ -122,7 +151,6 @@
 
   &__label {
     font-family: Scala;
-    color: #e7040f;
     font-weight: 600;
   }
 

@@ -6,6 +6,7 @@ import upload from "../../assets/icons/upload.svg"
 import { addCharacter } from "../../Api"
 import { Hexagon, computeHp, randomInt } from "../../Character"
 const API_URL = `https://www.dnd5eapi.co`
+const SERVER_URL = `http://localhost:8080`
 
 function reshapeAbilityBonus(t) {
   return { [t.ability_score.index]: t.bonus }
@@ -40,25 +41,44 @@ function CreateCharacter() {
   const [hitdie, setHitdie] = useState(0)
   const [hp, setHp] = useState(0)
   const [speed, setSpeed] = useState(0)
+  const [classEquipment, setClassEquipment] = useState(null)
+  const [backgroundEquipment, setBackgroundEquipment] = useState(null)
+  const [traits, setTraits] = useState(null)
+  const [raceProficiencies, setRaceProficiencies] = useState(null)
+  const [classProficiencies, setClassProficiencies] = useState(null)
+  const [languages, setLanguages] = useState(null)
 
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    addCharacter({
+    const newChar = {
       charName,
       avatar,
       race: raceSelection,
       subrace: subraceSelection,
       char_class: classSelection,
-      abilities,
+      abilities: {
+        str: abilities.str + (bonuses.str ?? 0),
+        dex: abilities.dex + (bonuses.dex ?? 0),
+        con: abilities.con + (bonuses.con ?? 0),
+        wis: abilities.wis + (bonuses.wis ?? 0),
+        int: abilities.int + (bonuses.int ?? 0),
+        cha: abilities.cha + (bonuses.cha ?? 0),
+      },
       archetype,
       background,
       hp,
       speed,
       level: 1,
       exp: 0,
-    })
+      equipment: [...classEquipment, ...backgroundEquipment],
+      traits,
+      proficiencies: [...raceProficiencies, ...classProficiencies],
+      languages,
+    }
+    console.log("newChar", newChar)
+    addCharacter(newChar)
       .then((response) => {
         navigate("/")
       })
@@ -100,6 +120,9 @@ function CreateCharacter() {
       setSubRaces(response.data.subraces)
       setBonuses(reshapeAbilityBonuses(response.data.ability_bonuses))
       setSpeed(response.data.speed)
+      setTraits(response.data.traits)
+      setLanguages(response.data.languages)
+      setRaceProficiencies(response.data.starting_proficiencies)
     })
   }, [raceSelection])
 
@@ -122,8 +145,17 @@ function CreateCharacter() {
     axios.get(`${API_URL}/api/classes/${classSelection}`).then((response) => {
       setArchetypes(response.data.subclasses)
       setHitdie(response.data.hit_die)
+      setClassEquipment(response.data.starting_equipment)
+      setClassProficiencies(response.data.proficiencies)
     })
   }, [classSelection])
+
+  useEffect(() => {
+    if (background === "") return
+    axios.get(`${SERVER_URL}/backgrounds/${background}`).then((response) => {
+      setBackgroundEquipment(response.data.starting_equipment)
+    })
+  }, [background])
 
   useEffect(fetchData, [])
 
@@ -276,96 +308,45 @@ function CreateCharacter() {
 
         <div className="create__abilities">
           <div className="create__abilities--hexes">
-            <div className="create__hex--item">
-              <Hexagon
-                abilityBonus={bonuses.str}
-                abilities={abilities.str}
-                bonuses={bonuses.str}
-              />
-              <input
-                className="create__abilities--scores"
-                type="text"
-                value={abilities.str}
-                onChange={setAbility("str")}
-              />
-              <div className="create__abilities--scores-names">STR</div>
-            </div>
-            <div className="create__hex--item">
-              <Hexagon
-                abilityBonus={bonuses.dex}
-                abilities={abilities.dex}
-                bonuses={bonuses.dex}
-              />
-              <input
-                className="create__abilities--scores"
-                type="text"
-                value={abilities.dex}
-                onChange={setAbility("dex")}
-              />
-              <div className="create__abilities--scores-names">DEX</div>
-            </div>
-
-            <div className="create__hex--item">
-              <Hexagon
-                abilityBonus={bonuses.con}
-                abilities={abilities.con}
-                bonuses={bonuses.con}
-              />
-              <input
-                className="create__abilities--scores"
-                type="text"
-                value={abilities.con}
-                onChange={setAbility("con")}
-              />
-              <div className="create__abilities--scores-names">CON</div>
-            </div>
+            <Hexagon
+              label="STR"
+              ability={abilities.str}
+              bonus={bonuses.str}
+              onChange={setAbility("str")}
+            />
+            <Hexagon
+              label="DEX"
+              ability={abilities.dex}
+              bonus={bonuses.dex}
+              onChange={setAbility("dex")}
+            />
+            <Hexagon
+              label="CON"
+              ability={abilities.con}
+              bonus={bonuses.con}
+              onChange={setAbility("con")}
+            />
           </div>
 
           <div className="create__abilities--hexes">
-            <div className="create__hex--item">
-              <Hexagon
-                abilityBonus={bonuses.int}
-                abilities={abilities.int}
-                bonuses={bonuses.int}
-              />
-              <input
-                className="create__abilities--scores"
-                type="text"
-                value={abilities.int}
-                onChange={setAbility("int")}
-              />
-              <div className="create__abilities--scores-names">INT</div>
-            </div>
-
-            <div className="create__hex--item">
-              <Hexagon
-                abilityBonus={bonuses.wis}
-                abilities={abilities.wis}
-                bonuses={bonuses.wis}
-              />
-              <input
-                className="create__abilities--scores"
-                type="text"
-                value={abilities.wis}
-                onChange={setAbility("wis")}
-              />
-              <div className="create__abilities--scores-names">WIS</div>
-            </div>
-
-            <div className="create__hex--item">
-              <Hexagon
-                abilityBonus={bonuses.cha}
-                abilities={abilities.cha}
-                bonuses={bonuses.cha}
-              />
-              <input
-                className="create__abilities--scores"
-                type="text"
-                value={abilities.cha}
-                onChange={setAbility("cha")}
-              />
-              <div className="create__abilities--scores-names">CHA</div>
-            </div>
+            <Hexagon
+              label="INT"
+              ability={abilities.int}
+              bonus={bonuses.int}
+              onChange={setAbility("int")}
+            />
+            <Hexagon
+              label="WIS"
+              ability={abilities.wis}
+              bonus={bonuses.wis}
+              onChange={setAbility("wis")}
+            />
+            <Hexagon
+              label="CHA"
+              ability={abilities.cha}
+              bonus={bonuses.cha}
+              onChange={setAbility("cha")}
+            />
           </div>
         </div>
 
