@@ -71,33 +71,36 @@
 
     &--middle {
       display: flex;
-      flex-wrap: wrap;
 
       &-title {
-        width: 50%;
         text-align: end;
         align-self: flex-end;
         padding-bottom: 0.25rem;
       }
       &-value {
-        align-self: flex-end;
-        width: 40%;
-        border-bottom: 1px solid black;
-        padding-left: 0.5rem;
-        padding-bottom: 0.25rem;
+        align-self: center;
+        padding-right: 0.5rem;
+      }
+
+      &-open {
+        width: 25px;
+        height: 25px;
       }
     }
     &--right {
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: flex-end;
       width: 20%;
 
       &-button {
         width: 50px;
         height: 50px;
+        border-radius: 50%;
         border: none;
-        background: none;
+        background: white;
+        display: flex;
+        justify-content: center;
 
         &:hover {
           filter: brightness(0.5);

@@ -8,7 +8,6 @@
 
   &__card {
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
     width: 100%;
     padding: 1rem;
@@ -17,30 +16,143 @@
     border-radius: 10px;
     margin-bottom: 1rem;
     box-shadow: 5px 5px 2px 2px #666666;
+    flex-grow: 1;
+  }
+
+  &__titles {
+    margin: 0.5rem 0;
+    width: 100%;
   }
 
   &__details {
+    position: relative;
     border: 1px solid black;
+    border-radius: 4px;
     margin: 1rem;
+    padding: 1rem;
+
+    &--container {
+      display: flex;
+    }
+
+    &--info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    &--avatar {
+      width: 50px;
+      height: 50px;
+      background-color: #666666;
+      border: 2px solid #ffb700;
+      border-radius: 50%;
+
+      &-container {
+        margin-right: 1rem;
+      }
+    }
+
+    &--element {
+      display: flex;
+      justify-content: space-between;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+
+      &-title {
+        font-weight: 600;
+        color: red;
+      }
+
+      &-input {
+        height: 2rem;
+        width: 6.25rem;
+        font-family: Dalelands;
+        font-size: 1rem;
+      }
+    }
   }
 
   &__core {
     border: 1px solid black;
+    padding: 1rem;
     margin: 1rem;
+    position: relative;
+    border-radius: 4px;
+
+    &--details {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
   }
 
   &__abilities {
     border: 1px solid black;
+    padding: 1rem;
     margin: 1rem;
+    position: relative;
+    border-radius: 4px;
   }
 
   &__wep-spells {
     border: 1px solid black;
+    padding: 1rem;
     margin: 1rem;
+    position: relative;
+    border-radius: 4px;
   }
 
   &__misc {
     border: 1px solid black;
+    padding: 1rem;
     margin: 1rem;
+    position: relative;
+    border-radius: 4px;
   }
+}
+
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__label {
+    font-family: Scala;
+    color: #e7040f;
+    font-weight: 600;
+  }
+
+  &__input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-family: Dalelands;
+    font-size: 1.5rem;
+    border: 1px solid #ffb700;
+  }
+}
+
+.death-saves {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+
+  &__title {
+    color: #e7040f;
+  }
+  &__input {
+    border: none;
+  }
+}
+
+.toggle {
+  position: absolute;
+  right: 1rem;
+  top: 1.5rem;
+  width: 2rem;
+  height: 2rem;
 }

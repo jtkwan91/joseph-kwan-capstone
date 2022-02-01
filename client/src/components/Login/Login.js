@@ -12,8 +12,8 @@ function Login({setCurrentUser}) {
     e.preventDefault()
     loginUser({email:loginId, password})
     .then(setCurrentUser)
-    .catch(() => {
-      alert("Invalid login id or password")
+    .catch((err) => {
+      console.error("Invalid login id or password:", err.message)
     })
   }
 

@@ -3,15 +3,18 @@
 .header {
   display: flex;
   justify-content: space-between;
-  position: relative;
+  position: sticky;
+  top: 0;
   align-items: center;
   padding: 1rem;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
   background-color: #666666;
   margin-bottom: 1rem;
+  z-index: 1;
 
   &__title {
     font-family: Draconis;
+    justify-self: center;
     font-size: 32px;
     text-align: center;
     text-decoration: none;
@@ -21,8 +24,12 @@
       color: white;
     }
   }
-  &__dropdown {
+
+  &__welcome {
+    color: white;
     margin-right: 1rem;
+  }
+  &__dropdown {
     border: 2px solid #ffb700;
     border-radius: 50%;
     background: #666666;
@@ -73,6 +80,17 @@
   &__logo {
     width: 4rem;
     height: 4rem;
+
+    &-container {
+      width: 11rem;
+    }
+  }
+
+  &__right {
+    width: 11rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 }
 
