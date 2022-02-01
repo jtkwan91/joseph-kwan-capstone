@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import "./CreateCharacter.scss"
 import upload from "../../assets/icons/upload.svg"
 import { addCharacter } from "../../Api"
-import { computeModifier, Hexagon, computeHp, randomInt } from "../../Character"
+import { Hexagon, computeHp, randomInt } from "../../Character"
 const API_URL = `https://www.dnd5eapi.co`
 
 function reshapeAbilityBonus(t) {

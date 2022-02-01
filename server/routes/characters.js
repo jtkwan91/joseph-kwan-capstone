@@ -22,29 +22,37 @@ const {
 // })
 
 async function withDependencies(char) {
+  const [race, subrace, classData, archetype, background] = await Promise.all([
+    getRace(char.race),
+    getSubRace(char.subrace),
+    getClass(char.class),
+    getArchetype(char.archetype),
+    getBackground(char.background),
+  ])
   return {
     ...char,
-    avatar: char.avatar ? char.avatar.toString() : char.avatar,
-    race: await getRace(char.race),
-    subrace: await getSubRace(char.subrace),
-    class: await getClass(char.class),
-    archetype: await getArchetype(char.archetype),
-    background: await getBackground(char.background),
+    avatar: char.avatar ? true : false,
+    race: race,
+    subrace: subrace,
+    class: classData,
+    archetype: archetype,
+    background: background,
   }
 }
 
-router.get("/", (req, res) => {
-  if (!req.session.userId) return res.status(403).send("You must be logged in.")
-  knex
-    .select("*")
-    .from("characters")
-    .where({ user_id: req.session.userId })
-    .then(async (data) =>
-      res.json(await Promise.all(data.map(withDependencies)))
-    )
-    .catch((err) => {
-      res.status(500).send("Error getting characters")
-    })
+router.get("/", async (req, res) => {
+  try {
+    if (!req.session.userId)
+      return res.status(403).send("You must be logged in.")
+    const chars = await knex
+      .select("*")
+      .from("characters")
+      .where({ user_id: req.session.userId })
+    res.json(await Promise.all(chars.map(withDependencies)))
+  } catch (err) {
+    console.log("ERROR:", err.message)
+    res.status(500).send("Error getting characters")
+  }
 })
 
 router.get("/:id", async (req, res) => {
@@ -61,6 +69,32 @@ router.get("/:id", async (req, res) => {
     return res.json(await withDependencies(char))
   } catch (err) {
     res.status(500).send("Error getting character")
+  }
+})
+
+router.get("/:id/avatar", async (req, res) => {
+  if (!req.session.userId) return res.status(403).send("You must be logged in.")
+  try {
+    const char = await knex
+      .select("avatar", "user_id")
+      .from("characters")
+      .where({ id: req.params.id })
+      .first()
+    if (!char) return res.status(404).send("Error avatar not found")
+    if (char.user_id !== req.session.userId)
+      return res.status(403).send("Unauthorized access")
+    const [_match, mimeType, buffer] = char.avatar
+      .toString()
+      .match(/(?:data:(.*);base64,)(.*)/)
+    const binary = Buffer.from(buffer, "base64")
+    res.set("content-type", mimeType)
+    res.set("content-length", binary.length)
+    res.set("content-disposition", `inline; filename="avatar-${req.params.id}"`)
+    res.set("cache-control", "public, max-age=86400, immutable")
+    return res.send(binary)
+  } catch (err) {
+    console.log(err.message)
+    res.status(500).send("Error getting avatar")
   }
 })
 

@@ -8,6 +8,12 @@ export function registerUser(userData) {
   return client.post(`${serverUrl}/users/register`, userData)
 }
 
+export function initialiseUser() {
+  return client
+    .get(`${serverUrl}/users/initialise`)
+    .then((response) => response.data)
+}
+
 export function loginUser(userData) {
   return client
     .post(`${serverUrl}/users/login`, userData)

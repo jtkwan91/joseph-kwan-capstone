@@ -44,7 +44,7 @@ function CharacterCard({ char }) {
         {char.avatar ? (
           <img
             className="char-list__card--left-avatar"
-            src={char.avatar}
+            src={`http://localhost:8080/characters/${char.id}/avatar`}
             alt="avatar"
           />
         ) : (

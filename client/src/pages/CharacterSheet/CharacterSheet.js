@@ -78,7 +78,7 @@ function CharDetails({ charDetails }) {
           <div className="sheet__details--avatar-container">
             <img
               className="sheet__details--avatar"
-              src={charDetails.avatar}
+              src={`http://localhost:8080/characters/${charDetails.id}/avatar`}
               alt="avatar"
             />
           </div>
@@ -118,7 +118,7 @@ function CharDetails({ charDetails }) {
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.subrace.name}
+                defaultValue={charDetails.subrace?.name ?? ""}
               />
             </div>
 
@@ -144,7 +144,7 @@ function CharDetails({ charDetails }) {
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.archetype.name}
+                defaultValue={charDetails.archetype?.name ?? ""}
               />
             </div>
 
@@ -157,7 +157,7 @@ function CharDetails({ charDetails }) {
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.background.name}
+                defaultValue={charDetails.background?.name ?? ""}
               />
             </div>
 

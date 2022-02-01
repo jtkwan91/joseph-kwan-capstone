@@ -11,7 +11,11 @@ function DeleteModal({ show, closeModal, char }) {
           <button className="delete__x" onClick={closeModal}>
             X
           </button>
-          <img className="delete__avatar" src={char.avatar} alt="avatar" />
+          <img
+            className="delete__avatar"
+            src={`http://localhost:8080/characters/${char.id}/avatar`}
+            alt="avatar"
+          />
           <h1 className="delete__header">
             Delete {char.name}, the level {char.level} {char.class.name}?
           </h1>
