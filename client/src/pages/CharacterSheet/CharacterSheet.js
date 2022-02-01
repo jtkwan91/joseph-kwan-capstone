@@ -4,6 +4,7 @@ import eyeOpen from "../../assets/icons/open-eye.svg"
 import eyeClose from "../../assets/icons/closed-eye.svg"
 import { getCharacter } from "../../Api"
 import "./CharacterSheet.scss"
+import { Hexagon } from "../../Character"
 
 //to do onChange function for experience, level, hps, death saves
 
@@ -25,7 +26,7 @@ function CharacterSheet() {
       <div className="sheet__card">
         {charDetails ? (
           <>
-            {/* <pre>{JSON.stringify(charDetails, null, 2)}</pre> */}
+            <pre>{JSON.stringify(charDetails, null, 2)}</pre>
             <CharDetails charDetails={charDetails} />
             <Core charDetails={charDetails} />
             <Abilities charDetails={charDetails} />
@@ -389,7 +390,45 @@ function Abilities({ charDetails }) {
       )}
       {toggle ? (
         <div className="sheet__abilities--details">
-          <div className="stat-block">
+          <div className="create__abilities">
+            <div className="create__abilities--hexes">
+              <Hexagon
+                label="STR"
+                ability={charDetails.abi_str}
+                onChange={() => console.log("todo update: str")}
+              />
+              <Hexagon
+                label="DEX"
+                ability={charDetails.abi_dex}
+                onChange={() => console.log("todo update: dex")}
+              />
+              <Hexagon
+                label="CON"
+                ability={charDetails.abi_con}
+                onChange={() => console.log("todo update: con")}
+              />
+            </div>
+
+            <div className="create__abilities--hexes">
+              <Hexagon
+                label="INT"
+                ability={charDetails.abi_int}
+                onChange={() => console.log("todo update: int")}
+              />
+              <Hexagon
+                label="WIS"
+                ability={charDetails.abi_wis}
+                onChange={() => console.log("todo update: wis")}
+              />
+              <Hexagon
+                label="CHA"
+                ability={charDetails.abi_cha}
+                onChange={() => console.log("todo update: cha")}
+              />
+            </div>
+          </div>
+
+          {/* <div className="stat-block">
             <label className="stat-block__label" htmlFor="abi">
               STR
             </label>
@@ -442,7 +481,7 @@ function Abilities({ charDetails }) {
               className="stat-block__input"
               defaultValue={charDetails.abi_cha}
             />
-          </div>
+          </div> */}
         </div>
       ) : null}
     </div>
@@ -514,36 +553,56 @@ function MiscData({ charDetails }) {
       )}
       {toggle ? (
         <div>
-          <h4>Equipment</h4>
-          <ul>
-            {charDetails.class.starting_equipment.map((e) => (
-              <li key={e.equipment.index}>{e.equipment.name}</li>
-            ))}
-            {charDetails.background.starting_equipment.map((e) => (
-              <li key={e.equipment.index}>{e.equipment.name}</li>
-            ))}
-          </ul>
-          <h4>Proficiencies</h4>
-          <ul>
-            {charDetails.race.starting_proficiencies.map((p) => (
-              <li key={p.index}>{p.name}</li>
-            ))}
-            {charDetails.class.proficiencies.map((p) => (
-              <li key={p.index}>{p.name}</li>
-            ))}
-          </ul>
-          <h4>Languages</h4>
-          <ul>
-            {charDetails.race.languages.map((l) => (
-              <li key={l.index}>{l.name}</li>
-            ))}
-          </ul>
-          <h4>Traits</h4>
-          <ul>
-            {charDetails.race.traits.map((t) => (
-              <li key={t.index}>{t.name}</li>
-            ))}
-          </ul>
+          <div className="sheet__misc--info">
+            <div className="sheet__misc--lists">
+              <label className="sheet__misc--label">Equipment</label>
+              <textarea
+                name="equipment"
+                id="misc-equipment"
+                cols="30"
+                rows="10"
+              >
+                {charDetails.equipment.join("\n")}
+              </textarea>
+              <label className="sheet__misc--label">Proficiencies</label>
+              <textarea
+                name="proficiencies"
+                id="misc-proficiencies"
+                cols="30"
+                rows="10"
+              >
+                {charDetails.proficiencies.join("\n")}
+              </textarea>
+              <label className="sheet__misc--label">Languages</label>
+              <textarea
+                name="languages"
+                id="misc-languages"
+                cols="30"
+                rows="10"
+              >
+                {charDetails.languages.join("\n")}
+              </textarea>
+
+              <label className="sheet__misc--label">Traits</label>
+              <textarea name="languages" id="misclanguages" cols="30" rows="10">
+                {charDetails.traits.join("\n")}
+              </textarea>
+            </div>
+            <div className="sheet__notes">
+              <label className="sheet__notes--label" htmlFor="notes">
+                Notes
+              </label>
+              <textarea
+                className="sheet__notes--textarea"
+                name="notes"
+                id="notes"
+                cols="30"
+                rows="10"
+              >
+                {/* {charDetails.notes} */}
+              </textarea>
+            </div>{" "}
+          </div>
         </div>
       ) : null}
     </div>
