@@ -255,103 +255,96 @@ function Core({ char }) {
       )}
       {toggle ? (
         <div className="sheet__core--details">
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="initiative">
-              Initiative:
-            </label>
-            <input
-              className="stat-block__input"
-              id="initiative"
-              defaultValue={0}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="inspiration">
-              Inspiration
-            </label>
-            {inspirationButton}
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="speed">
-              Speed:
-            </label>
-            <input
-              className="stat-block__input"
-              id="speed"
-              defaultValue={char.speed}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="proficiency">
-              Proficiency
-            </label>
-            <input
-              className="stat-block__input"
-              id="proficiency"
-              defaultValue={`+${2}`}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="current_hp">
-              Current HP
-            </label>
-            <input
-              className="stat-block__input"
-              name="current_hp"
-              id="current_hp"
-              defaultValue={char.current_hp}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="max_hp">
-              Max HP
-            </label>
-            <input
-              className="stat-block__input"
-              name="max_hp"
-              id="max_hp"
-              defaultValue={char.max_hp}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="temp_hp">
-              Temp HP
-            </label>
-            <input
-              className="stat-block__input"
-              name="temp_hp"
-              id="temp_hp"
-              defaultValue={char.temp_hp}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="hit_die">
-              Hit Die
-            </label>
-            <input
-              className="stat-block__input"
-              name="hit_die"
-              id="hit_die"
-              defaultValue={char.class.hit_die}
-            />
-          </div>
-          <div className="stat-block">
-            <h3 className="stat-block__label">Death Saves</h3>
-            <div className="death-saves">
-              <label htmlFor="death_passes" className="death-saves__title">
-                Fail
+          <div className="sheet__core--health">
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="current_hp">
+                Current HP
               </label>
-              {fail1button}
-              {fail2button}
-              {fail3button}
+              <input
+                className="stat-block__input Hp"
+                name="current_hp"
+                id="current_hp"
+                defaultValue={`${char.current_hp}/${char.max_hp}`}
+              />
             </div>
-            <div className="death-saves">
-              <label htmlFor="death_passes" className="death-saves__title">
-                Pass
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="temp_hp">
+                Temp HP
               </label>
-              {pass1button}
-              {pass2button}
-              {pass3button}
+              <input
+                className="stat-block__input Hp"
+                name="temp_hp"
+                id="temp_hp"
+                defaultValue={char.temp_hp}
+              />
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="hit_die">
+                Hit Die
+              </label>
+              <input
+                className="stat-block__input Hp"
+                name="hit_die"
+                id="hit_die"
+                defaultValue={`${1 * char.level}d${char.class.hit_die}`}
+              />
+            </div>
+            <div className="stat-block">
+              <h3 className="stat-block__label">Death Saves</h3>
+              <div className="death-saves">
+                <label htmlFor="death_passes" className="death-saves__title">
+                  Fail
+                </label>
+                {fail1button}
+                {fail2button}
+                {fail3button}
+              </div>
+              <div className="death-saves">
+                <label htmlFor="death_passes" className="death-saves__title">
+                  Pass
+                </label>
+                {pass1button}
+                {pass2button}
+                {pass3button}
+              </div>
+            </div>
+          </div>
+          <div className="sheet__core--other">
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="initiative">
+                Initiative
+              </label>
+              <input
+                className="stat-block__input"
+                id="initiative"
+                defaultValue={0}
+              />
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="inspiration">
+                Inspiration
+              </label>
+              {inspirationButton}
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="speed">
+                Speed
+              </label>
+              <input
+                className="stat-block__input"
+                id="speed"
+                defaultValue={char.speed}
+              />
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="proficiency">
+                Proficiency
+              </label>
+              <input
+                className="stat-block__input"
+                id="proficiency"
+                defaultValue={`+${Math.ceil(2 + (0.25 * char.level - 1))}`}
+              />
             </div>
           </div>
         </div>
@@ -536,6 +529,7 @@ function WeaponsSpells({ char }) {
                 <div className="sheet__attacks--row-cell">
                   <button
                     type="button"
+                    className="sheet__attacks--remove"
                     onClick={removeAttack(index)}
                     children="X"
                   />
@@ -547,7 +541,7 @@ function WeaponsSpells({ char }) {
             type="button"
             className="sheet__attacks--add"
             onClick={addAttack}
-            children="➕"
+            children="+"
           />
         </>
       ) : null}

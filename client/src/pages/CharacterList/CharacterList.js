@@ -15,7 +15,7 @@ function CharacterList() {
     getCharacters()
       .then(setCharacterList)
       .catch((err) => {
-        console.error(err.mesasage)
+        console.error(err.message)
       })
   }, [timestamp])
 
@@ -68,7 +68,7 @@ function CharacterCard({ char, refresh }) {
           />
         )}
         <h2 className="char-list__card--left-level">LVL</h2>
-        <h3 className="char-list__card--left-level-number">1</h3>
+        <h3 className="char-list__card--left-level-number">{char.level}</h3>
       </div>
 
       <div className="char-list__card--middle">
