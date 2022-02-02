@@ -21,24 +21,6 @@ const {
 //     })
 // })
 
-// "equipment": [
-//   {
-//     "equipment": {
-//       "index": "leather-armor",
-//       "name": "Leather Armor",
-//       "url": "/api/equipment/leather-armor"
-//     },
-//     "quantity": 1
-//   },
-//   {
-//     "equipment": {
-//       "index": "explorers-pack",
-//       "name": "Explorer's Pack",
-//       "url": "/api/equipment/explorers-pack"
-//     },
-//     "quantity": 1
-//   },
-
 function formatEquipment(equips) {
   return JSON.stringify(equips.map((e) => e.equipment.name))
 }
@@ -63,7 +45,7 @@ function charToDb(char) {
   }
 }
 
-async function withDependencies(char) {
+async function charFromDb(char) {
   const [race, subrace, classData, archetype, background] = await Promise.all([
     getRace(char.race),
     getSubRace(char.subrace),
@@ -94,7 +76,7 @@ router.get("/", async (req, res) => {
       .select("*")
       .from("characters")
       .where({ user_id: req.session.userId })
-    res.json(await Promise.all(chars.map(withDependencies)))
+    res.json(await Promise.all(chars.map(charFromDb)))
   } catch (err) {
     console.log("ERROR:", err.message)
     res.status(500).send("Error getting characters")
@@ -112,7 +94,7 @@ router.get("/:id", async (req, res) => {
     if (!char) return res.status(404).send("Error character not found")
     if (char.user_id !== req.session.userId)
       return res.status(403).send("Unauthorized access")
-    return res.json(await withDependencies(char))
+    return res.json(await charFromDb(char))
   } catch (err) {
     res.status(500).send("Error getting character")
   }

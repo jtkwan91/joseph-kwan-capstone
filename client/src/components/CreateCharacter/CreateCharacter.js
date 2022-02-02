@@ -351,7 +351,7 @@ function CreateCharacter() {
         </div>
 
         <label className="create__form--titles" htmlFor="hp">
-          HP<span className="">- hit die = {hitdie}</span>{" "}
+          HP<span className="">- hit die = {hitdie}</span>
         </label>
         <div className="create__form--hp">
           <input

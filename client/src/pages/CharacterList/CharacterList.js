@@ -5,6 +5,7 @@ import trash from "../../assets/icons/trash.svg"
 import open from "../../assets/icons/open.svg"
 import DeleteModal from "../../components/DeleteModal/DeleteModal"
 import { getCharacters } from "../../Api"
+import logo from "../../assets/icons/dnd.svg"
 // todo import context
 
 function CharacterList() {
@@ -39,11 +40,19 @@ export default CharacterList
 
 function CharacterCard({ char, refresh }) {
   const [show, setShow] = useState(false)
-  const handleDeleteModal = () => setShow(true)
-  const closeModal = () => setShow(false)
+  const openModal = (e) => {
+    setShow(true)
+    e.preventDefault()
+    e.stopImmediatePropagation()
+  }
+  const closeModal = (e) => {
+    setShow(false)
+    e.preventDefault()
+    e.stopImmediatePropagation()
+  }
 
   return (
-    <div className="char-list__card">
+    <Link className="char-list__card" to={`/${char.id}`}>
       {/* <pre>{JSON.stringify(char, null, 2)}</pre> */}
       <div className="char-list__card--left">
         {char.avatar ? (
@@ -53,7 +62,11 @@ function CharacterCard({ char, refresh }) {
             alt="avatar"
           />
         ) : (
-          <div className="char-list__card--left-avatar"></div>
+          <img
+            className="char-list__card--left-avatar"
+            src={logo}
+            alt="avatar"
+          />
         )}
         <h2 className="char-list__card--left-level">LVL</h2>
         <h3 className="char-list__card--left-level-number">1</h3>
@@ -63,16 +76,10 @@ function CharacterCard({ char, refresh }) {
         <h3 className="char-list__card--middle-value">{char.name}, </h3>
         <h3 className="char-list__card--middle-value">the {char.race.name}</h3>
         <h3 className="char-list__card--middle-value">{char.class.name}</h3>
-        <Link className="char-list__card--middle-open" to={`/${char.id}`}>
-          <img src={open} alt="open icon" />
-        </Link>
       </div>
 
       <div className="char-list__card--right">
-        <button
-          className="char-list__card--right-button"
-          onClick={handleDeleteModal}
-        >
+        <button className="char-list__card--right-button" onClick={openModal}>
           <img
             className="char-list__card--right-image"
             src={trash}
@@ -86,6 +93,6 @@ function CharacterCard({ char, refresh }) {
           refresh={refresh}
         />
       </div>
-    </div>
+    </Link>
   )
 }

@@ -5,11 +5,12 @@ import eyeClose from "../../assets/icons/closed-eye.svg"
 import { getCharacter } from "../../Api"
 import "./CharacterSheet.scss"
 import { Hexagon } from "../../Character"
+import logo from "../../assets/icons/dnd.svg"
 
 //to do onChange function for experience, level, hps, death saves
 
 function CharacterSheet() {
-  const [charDetails, setCharDetails] = useState(null)
+  const [char, setCharDetails] = useState(null)
 
   const params = useParams()
 
@@ -24,14 +25,14 @@ function CharacterSheet() {
   return (
     <div className="sheet">
       <div className="sheet__card">
-        {charDetails ? (
+        {char ? (
           <>
-            <pre>{JSON.stringify(charDetails, null, 2)}</pre>
-            <CharDetails charDetails={charDetails} />
-            <Core charDetails={charDetails} />
-            <Abilities charDetails={charDetails} />
-            <WeaponsSpells charDetails={charDetails} />
-            <MiscData charDetails={charDetails} />
+            {/* <pre>{JSON.stringify(char, null, 2)}</pre> */}
+            <CharDetails char={char} />
+            <Core char={char} />
+            <Abilities char={char} />
+            <WeaponsSpells char={char} />
+            <MiscData char={char} />
           </>
         ) : (
           <p>Loading...</p>
@@ -43,7 +44,7 @@ function CharacterSheet() {
 
 export default CharacterSheet
 
-function CharDetails({ charDetails }) {
+function CharDetails({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
 
@@ -77,11 +78,19 @@ function CharDetails({ charDetails }) {
       {toggle ? (
         <div className="sheet__details--container">
           <div className="sheet__details--avatar-container">
-            <img
-              className="sheet__details--avatar"
-              src={`http://localhost:8080/characters/${charDetails.id}/avatar`}
-              alt="avatar"
-            />
+            {char.avatar ? (
+              <img
+                className="char-list__card--left-avatar"
+                src={`http://localhost:8080/characters/${char.id}/avatar`}
+                alt="avatar"
+              />
+            ) : (
+              <img
+                className="char-list__card--left-avatar"
+                src={logo}
+                alt="avatar"
+              />
+            )}
           </div>
           <div className="sheet__details--info">
             <div className="sheet__details--element">
@@ -89,11 +98,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-name"
               >
-                Name:{" "}
+                Name:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.name}
+                defaultValue={char.name}
               />
             </div>
 
@@ -102,11 +111,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-race"
               >
-                Race:{" "}
+                Race:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.race.name}
+                defaultValue={char.race.name}
               />
             </div>
 
@@ -115,11 +124,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-subrace"
               >
-                Subrace:{" "}
+                Subrace:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.subrace?.name ?? ""}
+                defaultValue={char.subrace?.name ?? ""}
               />
             </div>
 
@@ -128,11 +137,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-class"
               >
-                Class:{" "}
+                Class:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.class.name}
+                defaultValue={char.class.name}
               />
             </div>
 
@@ -141,11 +150,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-archetype"
               >
-                Archetype:{" "}
+                Archetype:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.archetype?.name ?? ""}
+                defaultValue={char.archetype?.name ?? ""}
               />
             </div>
 
@@ -154,11 +163,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-background"
               >
-                Background:{" "}
+                Background:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.background?.name ?? ""}
+                defaultValue={char.background?.name ?? ""}
               />
             </div>
 
@@ -171,7 +180,7 @@ function CharDetails({ charDetails }) {
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.exp}
+                defaultValue={char.exp}
               />
             </div>
             <div className="sheet__details--element">
@@ -180,7 +189,7 @@ function CharDetails({ charDetails }) {
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.level}
+                defaultValue={char.level}
               />
             </div>
           </div>
@@ -190,15 +199,37 @@ function CharDetails({ charDetails }) {
   )
 }
 
-function Core({ charDetails }) {
+function useCheckbox(initialState, yes, no) {
+  const [checked, setChecked] = useState(initialState)
+  return [
+    checked,
+    <div onClick={(e) => setChecked(!checked)} className="stat-block__input">
+      {checked ? (
+        <div className="checkbox__checked"> {yes} </div>
+      ) : (
+        <div className="checkbox__empty"> {no} </div>
+      )}
+    </div>,
+  ]
+}
+
+function Core({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
+  const [fail1, fail1button] = useCheckbox(false, "💀", "")
+  const [fail2, fail2button] = useCheckbox(false, "💀", "")
+  const [fail3, fail3button] = useCheckbox(false, "💀", "")
+  const [pass1, pass1button] = useCheckbox(false, "💚", "")
+  const [pass2, pass2button] = useCheckbox(false, "💚", "")
+  const [pass3, pass3button] = useCheckbox(false, "💚", "")
+  const [inspiration, inspirationButton] = useCheckbox(false, "💡", "")
 
   return (
     <div className="sheet__core">
       {/* AC, initiative, speed, current hp, max hp, temp hp, hit dice, death saves,
       proficiency bonus, inspiration go here */}
       <h1 className="sheet__titles">Core</h1>
+
       {eyecon ? (
         <img
           className="toggle"
@@ -224,7 +255,7 @@ function Core({ charDetails }) {
         <div className="sheet__core--details">
           <div className="stat-block">
             <label className="stat-block__label" htmlFor="initiative">
-              Initiative:{" "}
+              Initiative:
             </label>
             <input
               className="stat-block__input"
@@ -236,25 +267,21 @@ function Core({ charDetails }) {
             <label className="stat-block__label" htmlFor="inspiration">
               Inspiration
             </label>
-            <input
-              className="stat-block__input"
-              id="inspiration"
-              type="checkbox"
-            />
+            {inspirationButton}
           </div>
           <div className="stat-block">
             <label className="stat-block__label" htmlFor="speed">
-              Speed:{" "}
+              Speed:
             </label>
             <input
               className="stat-block__input"
               id="speed"
-              defaultValue={charDetails.speed}
+              defaultValue={char.speed}
             />
           </div>
           <div className="stat-block">
             <label className="stat-block__label" htmlFor="proficiency">
-              Proficency
+              Proficiency
             </label>
             <input
               className="stat-block__input"
@@ -270,7 +297,7 @@ function Core({ charDetails }) {
               className="stat-block__input"
               name="current_hp"
               id="current_hp"
-              defaultValue={charDetails.current_hp}
+              defaultValue={char.current_hp}
             />
           </div>
           <div className="stat-block">
@@ -281,7 +308,7 @@ function Core({ charDetails }) {
               className="stat-block__input"
               name="max_hp"
               id="max_hp"
-              defaultValue={charDetails.max_hp}
+              defaultValue={char.max_hp}
             />
           </div>
           <div className="stat-block">
@@ -292,7 +319,7 @@ function Core({ charDetails }) {
               className="stat-block__input"
               name="temp_hp"
               id="temp_hp"
-              defaultValue={charDetails.temp_hp}
+              defaultValue={char.temp_hp}
             />
           </div>
           <div className="stat-block">
@@ -303,54 +330,26 @@ function Core({ charDetails }) {
               className="stat-block__input"
               name="hit_die"
               id="hit_die"
-              defaultValue={charDetails.class.hit_die}
+              defaultValue={char.class.hit_die}
             />
           </div>
           <div className="stat-block">
             <h3 className="stat-block__label">Death Saves</h3>
             <div className="death-saves">
-              <label htmlFor="death_fail" className="death-saves__title">
+              <label htmlFor="death_passes" className="death-saves__title">
                 Fail
               </label>
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_fail"
-              />
-
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_fail"
-              />
-
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_fail"
-              />
+              {fail1button}
+              {fail2button}
+              {fail3button}
             </div>
             <div className="death-saves">
               <label htmlFor="death_passes" className="death-saves__title">
                 Pass
               </label>
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_pass"
-              />
-
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_pass"
-              />
-
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_pass"
-              />
+              {pass1button}
+              {pass2button}
+              {pass3button}
             </div>
           </div>
         </div>
@@ -359,7 +358,7 @@ function Core({ charDetails }) {
   )
 }
 
-function Abilities({ charDetails }) {
+function Abilities({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
 
@@ -394,17 +393,17 @@ function Abilities({ charDetails }) {
             <div className="create__abilities--hexes">
               <Hexagon
                 label="STR"
-                ability={charDetails.abi_str}
+                ability={char.abi_str}
                 onChange={() => console.log("todo update: str")}
               />
               <Hexagon
                 label="DEX"
-                ability={charDetails.abi_dex}
+                ability={char.abi_dex}
                 onChange={() => console.log("todo update: dex")}
               />
               <Hexagon
                 label="CON"
-                ability={charDetails.abi_con}
+                ability={char.abi_con}
                 onChange={() => console.log("todo update: con")}
               />
             </div>
@@ -412,83 +411,28 @@ function Abilities({ charDetails }) {
             <div className="create__abilities--hexes">
               <Hexagon
                 label="INT"
-                ability={charDetails.abi_int}
+                ability={char.abi_int}
                 onChange={() => console.log("todo update: int")}
               />
               <Hexagon
                 label="WIS"
-                ability={charDetails.abi_wis}
+                ability={char.abi_wis}
                 onChange={() => console.log("todo update: wis")}
               />
               <Hexagon
                 label="CHA"
-                ability={charDetails.abi_cha}
+                ability={char.abi_cha}
                 onChange={() => console.log("todo update: cha")}
               />
             </div>
           </div>
-
-          {/* <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              STR
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_str}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              DEX
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_dex}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              CON
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_con}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              INT
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_int}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              WIS
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_wis}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              CHA
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_cha}
-            />
-          </div> */}
         </div>
       ) : null}
     </div>
   )
 }
 
-function WeaponsSpells({ charDetails }) {
+function WeaponsSpells({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
 
@@ -521,7 +465,7 @@ function WeaponsSpells({ charDetails }) {
   )
 }
 
-function MiscData({ charDetails }) {
+function MiscData({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
 
@@ -558,34 +502,43 @@ function MiscData({ charDetails }) {
               <label className="sheet__misc--label">Equipment</label>
               <textarea
                 name="equipment"
+                className="sheet__misc--textarea"
                 id="misc-equipment"
                 cols="30"
                 rows="10"
               >
-                {charDetails.equipment.join("\n")}
+                {char.equipment.join("\n")}
               </textarea>
               <label className="sheet__misc--label">Proficiencies</label>
               <textarea
                 name="proficiencies"
+                className="sheet__misc--textarea"
                 id="misc-proficiencies"
                 cols="30"
                 rows="10"
               >
-                {charDetails.proficiencies.join("\n")}
+                {char.proficiencies.join("\n")}
               </textarea>
               <label className="sheet__misc--label">Languages</label>
               <textarea
                 name="languages"
+                className="sheet__misc--textarea"
                 id="misc-languages"
                 cols="30"
                 rows="10"
               >
-                {charDetails.languages.join("\n")}
+                {char.languages.join("\n")}
               </textarea>
 
               <label className="sheet__misc--label">Traits</label>
-              <textarea name="languages" id="misclanguages" cols="30" rows="10">
-                {charDetails.traits.join("\n")}
+              <textarea
+                name="traits"
+                className="sheet__misc--textarea"
+                id="misctraits"
+                cols="30"
+                rows="10"
+              >
+                {char.traits.join("\n")}
               </textarea>
             </div>
             <div className="sheet__notes">
@@ -599,9 +552,9 @@ function MiscData({ charDetails }) {
                 cols="30"
                 rows="10"
               >
-                {/* {charDetails.notes} */}
+                {/* {char.notes} */}
               </textarea>
-            </div>{" "}
+            </div>
           </div>
         </div>
       ) : null}

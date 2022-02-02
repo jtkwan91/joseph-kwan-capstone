@@ -127,6 +127,11 @@
       flex-direction: column;
       width: 45%;
     }
+    &--textarea {
+      font-family: Scala;
+      font-size: 1rem;
+      resize: none;
+    }
   }
   &__notes {
     display: flex;
@@ -161,6 +166,11 @@
     font-family: Dalelands;
     font-size: 1.5rem;
     border: 1px solid #ffb700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
   }
 }
 
@@ -184,4 +194,24 @@
   top: 1.5rem;
   width: 2rem;
   height: 2rem;
+}
+
+.checkbox__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  user-select: none;
+}
+
+.checkbox__checked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  user-select: none;
 }
