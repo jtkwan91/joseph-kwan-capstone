@@ -1,0 +1,816 @@
+[
+  {
+    "index": "acolyte",
+    "name": "Acolyte",
+    "starting_proficiencies": [
+      {
+        "index": "skill-insight",
+        "name": "Skill: Insight",
+        "url": "/api/proficiencies/skill-insight"
+      },
+      {
+        "index": "skill-religion",
+        "name": "Skill: Religion",
+        "url": "/api/proficiencies/skill-religion"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "charlatan",
+    "name": "Charlatan",
+    "starting_proficiencies": [
+      {
+        "index": "skill-deception",
+        "name": "Skill: Deception",
+        "url": "/api/proficiencies/skill-deception"
+      },
+      {
+        "index": "skill-sleight-of-hand",
+        "name": "Skill: Sleight of Hand",
+        "url": "/api/proficiencies/skill-sleight-of-hand"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-fine",
+          "name": "Clothes, fine",
+          "url": "/api/equipment/clothes-fine"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "disguise-kit",
+          "name": "Disguise Kit",
+          "url": "/api/equipment/disguise-kit"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "criminal",
+    "name": "Criminal",
+    "starting_proficiencies": [
+      {
+        "index": "skill-deception",
+        "name": "Skill: Deception",
+        "url": "/api/proficiencies/skill-deception"
+      },
+      {
+        "index": "skill-stealth",
+        "name": "Skill: Stealth",
+        "url": "/api/proficiencies/skill-stealth"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "crowbar",
+          "name": "Crowbar",
+          "url": "/api/equipment/crowbar"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "disguise-kit",
+          "name": "Disguise Kit",
+          "url": "/api/equipment/disguise-kit"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "criminal-spy",
+    "name": "Criminal (Spy)",
+    "starting_proficiencies": [
+      {
+        "index": "skill-deception",
+        "name": "Skill: Deception",
+        "url": "/api/proficiencies/skill-deception"
+      },
+      {
+        "index": "skill-stealth",
+        "name": "Skill: Stealth",
+        "url": "/api/proficiencies/skill-stealth"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "crowbar",
+          "name": "Crowbar",
+          "url": "/api/equipment/crowbar"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "disguise-kit",
+          "name": "Disguise Kit",
+          "url": "/api/equipment/disguise-kit"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "entertainer",
+    "name": "Entertainer",
+    "starting_proficiencies": [
+      {
+        "index": "skill-acrobatics",
+        "name": "Skill: Acrobatics",
+        "url": "/api/proficiencies/skill-acrobatics"
+      },
+      {
+        "index": "skill-performance",
+        "name": "Skill: Performance",
+        "url": "/api/proficiencies/skill-performance"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-costume",
+          "name": "Clothes, costume",
+          "url": "/api/equipment/clothes-costume"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "entertainer-gladiator",
+    "name": "Entertainer (Gladiator)",
+    "starting_proficiencies": [
+      {
+        "index": "skill-acrobatics",
+        "name": "Skill: Acrobatics",
+        "url": "/api/proficiencies/skill-acrobatics"
+      },
+      {
+        "index": "skill-performance",
+        "name": "Skill: Performance",
+        "url": "/api/proficiencies/skill-performance"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-costume",
+          "name": "Clothes, costume",
+          "url": "/api/equipment/clothes-costume"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "folk-hero",
+    "name": "Folk Hero",
+    "starting_proficiencies": [
+      {
+        "index": "skill-animal-handling",
+        "name": "Skill: Animal Handling",
+        "url": "/api/proficiencies/skill-animal-handling"
+      },
+      {
+        "index": "skill-survival",
+        "name": "Skill: Survival",
+        "url": "/api/proficiencies/skill-survival"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "shovel",
+          "name": "Shovel",
+          "url": "/api/equipment/shovel"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "iron-pot",
+          "name": "Iron Pot",
+          "url": "/api/equipment/iron-pot"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "guild-artisan",
+    "name": "Guild Artisan",
+    "starting_proficiencies": [
+      {
+        "index": "skill-insight",
+        "name": "Skill: Insight",
+        "url": "/api/proficiencies/skill-insight"
+      },
+      {
+        "index": "skill-persuasion",
+        "name": "Skill: Persuasion",
+        "url": "/api/proficiencies/skill-persuasion"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-travelers",
+          "name": "Clothes, traveler's",
+          "url": "/api/equipment/clothes-travelers"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "guild-artisan-guild-merchant",
+    "name": "Guild Artisan (Guild Merchant)",
+    "starting_proficiencies": [
+      {
+        "index": "skill-insight",
+        "name": "Skill: Insight",
+        "url": "/api/proficiencies/skill-insight"
+      },
+      {
+        "index": "skill-persuasion",
+        "name": "Skill: Persuasion",
+        "url": "/api/proficiencies/skill-persuasion"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-travelers",
+          "name": "Clothes, traveler's",
+          "url": "/api/equipment/clothes-travelers"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "hermit",
+    "name": "Hermit",
+    "starting_proficiencies": [
+      {
+        "index": "skill-medicine",
+        "name": "Skill: Medicine",
+        "url": "/api/proficiencies/skill-medicine"
+      },
+      {
+        "index": "skill-religion",
+        "name": "Skill: Religion",
+        "url": "/api/proficiencies/skill-religion"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "herbalism-kit",
+          "name": "Herbalism Kit",
+          "url": "/api/equipment/herbalism-kit"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "winter-blanket",
+          "name": "Winter Blanket",
+          "url": "/api/equipment/winter-blanket"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "noble",
+    "name": "Noble",
+    "starting_proficiencies": [
+      {
+        "index": "skill-history",
+        "name": "Skill: History",
+        "url": "/api/proficiencies/skill-history"
+      },
+      {
+        "index": "skill-persuasion",
+        "name": "Skill: Persuasion",
+        "url": "/api/proficiencies/skill-persuasion"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-fine",
+          "name": "Clothes, fine",
+          "url": "/api/equipment/clothes-fine"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "signet-ring",
+          "name": "Disguise Kit",
+          "url": "/api/equipment/signet-ring"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "scroll-of-pedigree",
+          "name": "Scroll of Pedigree",
+          "url": "/api/equipment/scroll-of-pedigree"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "noble-knight",
+    "name": "Noble (Knight)",
+    "starting_proficiencies": [
+      {
+        "index": "skill-history",
+        "name": "Skill: History",
+        "url": "/api/proficiencies/skill-history"
+      },
+      {
+        "index": "skill-persuasion",
+        "name": "Skill: Persuasion",
+        "url": "/api/proficiencies/skill-persuasion"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-fine",
+          "name": "Clothes, fine",
+          "url": "/api/equipment/clothes-fine"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "signet-ring",
+          "name": "Disguise Kit",
+          "url": "/api/equipment/signet-ring"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "scroll-of-pedigree",
+          "name": "Scroll of Pedigree",
+          "url": "/api/equipment/scroll-of-pedigree"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "outlander",
+    "name": "Outlander",
+    "starting_proficiencies": [
+      {
+        "index": "skill-athletics",
+        "name": "Skill: Athletics",
+        "url": "/api/proficiencies/skill-athletics"
+      },
+      {
+        "index": "skill-survival",
+        "name": "Skill: Survival",
+        "url": "/api/proficiencies/skill-survival"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-travelers",
+          "name": "Clothes, traveler's",
+          "url": "/api/equipment/clothes-travelers"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "staff",
+          "name": "Staff",
+          "url": "/api/equipment/staff"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "hunting-trap",
+          "name": "Hunting Trap",
+          "url": "/api/equipment/hunting-trap"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "sage",
+    "name": "Sage",
+    "starting_proficiencies": [
+      {
+        "index": "skill-arcana",
+        "name": "Skill: Arcana",
+        "url": "/api/proficiencies/skill-arcana"
+      },
+      {
+        "index": "skill-history",
+        "name": "Skill: History",
+        "url": "/api/proficiencies/skill-history"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "ink-1-ounce-bottle",
+          "name": "Ink (1 ounce bottle)",
+          "url": "/api/equipment/ink-1-ounce-bottle"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "ink-pen",
+          "name": "Ink pen",
+          "url": "/api/equipment/ink-pen"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "small-knife",
+          "name": "Small Knife",
+          "url": "/api/equipment/small-knife"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "sailor",
+    "name": "Sailor",
+    "starting_proficiencies": [
+      {
+        "index": "skill-athletics",
+        "name": "Skill: Athletics",
+        "url": "/api/proficiencies/skill-athletics"
+      },
+      {
+        "index": "skill-perception",
+        "name": "Skill: Perception",
+        "url": "/api/proficiencies/skill-perception"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "club",
+          "name": "Club",
+          "url": "/api/equipment/club"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "rope-silk-50-feet",
+          "name": "Rope, silk (50 feet)",
+          "url": "/api/equipment/rope-silk-50-feet"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "sailor-pirate",
+    "name": "Sailor (Pirate)",
+    "starting_proficiencies": [
+      {
+        "index": "skill-athletics",
+        "name": "Skill: Athletics",
+        "url": "/api/proficiencies/skill-athletics"
+      },
+      {
+        "index": "skill-perception",
+        "name": "Skill: Perception",
+        "url": "/api/proficiencies/skill-perception"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "club",
+          "name": "Club",
+          "url": "/api/equipment/club"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "rope-silk-50-feet",
+          "name": "Rope, silk (50 feet)",
+          "url": "/api/equipment/rope-silk-50-feet"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "soldier",
+    "name": "Soldier",
+    "starting_proficiencies": [
+      {
+        "index": "skill-athletics",
+        "name": "Skill: Athletics",
+        "url": "/api/proficiencies/skill-athletics"
+      },
+      {
+        "index": "skill-intimidation",
+        "name": "Skill: Intimidation",
+        "url": "/api/proficiencies/skill-intimidation"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "index": "urchin",
+    "name": "Urchin",
+    "starting_proficiencies": [
+      {
+        "index": "skill-sleight-of-hand",
+        "name": "Skill: Sleight of Hand",
+        "url": "/api/proficiencies/skill-sleight-of-hand"
+      },
+      {
+        "index": "skill-stealth",
+        "name": "Skill: Stealth",
+        "url": "/api/proficiencies/skill-stealth"
+      }
+    ],
+
+    "starting_equipment": [
+      {
+        "equipment": {
+          "index": "clothes-common",
+          "name": "Clothes, common",
+          "url": "/api/equipment/clothes-common"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "pouch",
+          "name": "Pouch",
+          "url": "/api/equipment/pouch"
+        },
+        "quantity": 1
+      },
+      {
+        "equipment": {
+          "index": "small-knife",
+          "name": "Small Knife",
+          "url": "/api/equipment/small-knife"
+        },
+        "quantity": 1
+      }
+    ]
+  }
+]

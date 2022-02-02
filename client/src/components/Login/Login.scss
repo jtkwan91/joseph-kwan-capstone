@@ -1,0 +1,57 @@
+@use "../../styles/mixins.scss" as *;
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &__form {
+    background-color: #284b9a;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    padding: 2rem;
+    padding-bottom: 1rem;
+    border-radius: 0.625rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px 3px;
+
+    &-banner {
+      background-color: #cf8455;
+      text-align: center;
+      height: 1rem;
+      width: 5rem;
+      transform: rotate(-45deg);
+      position: absolute;
+      top: 12px;
+      left: -20px;
+      font-size: 12px;
+      color: #210a02;
+      padding: 0.1rem;
+      font-family: Dalelands;
+    }
+
+    &-label {
+      color: #ecf69d;
+      margin-bottom: 0.5rem;
+    }
+
+    &-input {
+      margin-bottom: 0.5rem;
+    }
+
+    &-button {
+      @include button;
+      color: #284b9a;
+      background-color: #ecf69d;
+      margin-top: 0.5rem;
+    }
+  }
+
+  &__signup {
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+}

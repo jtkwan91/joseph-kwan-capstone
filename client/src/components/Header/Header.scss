@@ -1,0 +1,106 @@
+@use "../../styles/mixins" as *;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  align-items: center;
+  padding: 1rem;
+  padding-bottom: 1rem;
+  background-color: #666666;
+  margin-bottom: 1rem;
+  z-index: 100;
+
+  &__title {
+    font-family: Draconis;
+    justify-self: center;
+    font-size: 32px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    text-shadow: 1px 1px black;
+    &:visited {
+      color: white;
+    }
+  }
+
+  &__welcome {
+    color: white;
+    margin-right: 1rem;
+  }
+  &__dropdown {
+    border: 2px solid #ffb700;
+    border-radius: 50%;
+    background: #666666;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      filter: brightness(1.2);
+      cursor: pointer;
+    }
+    &-img {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    &-menu {
+      display: flex;
+      flex-direction: column;
+      text-align: end;
+      position: absolute;
+      right: 1rem;
+      background-color: #666666;
+      top: 75px;
+      border-radius: 4px;
+      z-index: 1;
+      text-shadow: 1px 1px black;
+
+      &--item {
+        font-size: 0.75rem;
+        text-decoration: none;
+        color: #ffb700;
+        font-weight: 600;
+        height: 2rem;
+        padding: 0.5rem 1rem;
+        border-top: 1px solid #ffb700;
+        border-bottom: 1px solid #ffb700;
+        border-radius: 4px;
+
+        &:visited {
+          color: #ffb700;
+        }
+      }
+    }
+  }
+  &__logo {
+    width: 4rem;
+    height: 4rem;
+
+    &-container {
+      width: 11rem;
+    }
+  }
+
+  &__right {
+    width: 11rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+.fade-top {
+  animation: animatetop 0.4s;
+}
+
+.signout {
+  color: #e7040f;
+  &:visited {
+    color: #e7040f;
+  }
+}
