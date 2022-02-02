@@ -52,7 +52,7 @@ function CreateCharacter() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const newChar = {
+    addCharacter({
       charName,
       avatar,
       race: raceSelection,
@@ -76,9 +76,7 @@ function CreateCharacter() {
       traits,
       proficiencies: [...raceProficiencies, ...classProficiencies],
       languages,
-    }
-    console.log("newChar", newChar)
-    addCharacter(newChar)
+    })
       .then((response) => {
         navigate("/")
       })

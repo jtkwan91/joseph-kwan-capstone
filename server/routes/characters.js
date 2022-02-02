@@ -66,6 +66,7 @@ async function charFromDb(char) {
     proficiencies: char.proficiencies ? JSON.parse(char.proficiencies) : [],
     equipment: char.equipment ? JSON.parse(char.equipment) : [],
     languages: char.languages ? JSON.parse(char.languages) : [],
+    notes: char.notes ?? "",
   }
 }
 

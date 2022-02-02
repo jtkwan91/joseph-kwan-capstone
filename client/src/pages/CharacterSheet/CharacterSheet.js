@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import eyeOpen from "../../assets/icons/open-eye.svg"
 import eyeClose from "../../assets/icons/closed-eye.svg"
 import { getCharacter, updateCharacter } from "../../Api"
@@ -7,22 +7,22 @@ import "./CharacterSheet.scss"
 import { Hexagon } from "../../Character"
 import logo from "../../assets/icons/dnd.svg"
 import { useDebouncedCallback } from "use-debounce"
-import axios from "axios"
 
 //to do onChange function for experience, level, hps, death saves
 
 function CharacterSheet() {
   const [char, setCharDetails] = useState(null)
 
+  const navigate = useNavigate()
   const params = useParams()
 
   useEffect(() => {
     getCharacter(params.id)
       .then(setCharDetails)
       .catch((err) => {
-        console.error(err.message)
+        navigate("/")
       })
-  }, [params.id])
+  }, [navigate, params.id])
 
   return (
     <div className="sheet">
@@ -218,13 +218,13 @@ function useCheckbox(initialState, yes, no) {
 function Core({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
-  const [fail1, fail1button] = useCheckbox(false, "💀", "")
-  const [fail2, fail2button] = useCheckbox(false, "💀", "")
-  const [fail3, fail3button] = useCheckbox(false, "💀", "")
-  const [pass1, pass1button] = useCheckbox(false, "💚", "")
-  const [pass2, pass2button] = useCheckbox(false, "💚", "")
-  const [pass3, pass3button] = useCheckbox(false, "💚", "")
-  const [inspiration, inspirationButton] = useCheckbox(false, "💡", "")
+  const [_fail1, fail1button] = useCheckbox(false, "💀", "")
+  const [_fail2, fail2button] = useCheckbox(false, "💀", "")
+  const [_fail3, fail3button] = useCheckbox(false, "💀", "")
+  const [_pass1, pass1button] = useCheckbox(false, "💚", "")
+  const [_pass2, pass2button] = useCheckbox(false, "💚", "")
+  const [_pass3, pass3button] = useCheckbox(false, "💚", "")
+  const [_inspiration, inspirationButton] = useCheckbox(false, "💡", "")
 
   return (
     <div className="sheet__core">

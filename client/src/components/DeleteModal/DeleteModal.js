@@ -6,7 +6,7 @@ import logo from "../../assets/icons/dnd.svg"
 function DeleteModal({ show, closeModal, char, refresh }) {
   const onDelete = async (e) => {
     await delCharacter(char.id)
-    closeModal()
+    closeModal(e)
     refresh()
   }
 
