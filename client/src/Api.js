@@ -38,6 +38,10 @@ export async function getCharacters() {
   return response.data
 }
 
+export function updateCharacter(id, data) {
+  return client.put(`${serverUrl}/characters/${id}`, data)
+}
+
 export function getCharacter(id) {
   return client
     .get(`${serverUrl}/characters/${id}`)

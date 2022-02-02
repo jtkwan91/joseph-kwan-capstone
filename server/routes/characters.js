@@ -61,6 +61,7 @@ async function charFromDb(char) {
     class: classData,
     archetype: archetype,
     background: background,
+    attacks: char.attacks ? JSON.parse(char.attacks) : [],
     traits: char.traits ? JSON.parse(char.traits) : [],
     proficiencies: char.proficiencies ? JSON.parse(char.proficiencies) : [],
     equipment: char.equipment ? JSON.parse(char.equipment) : [],
@@ -162,10 +163,22 @@ router.post("/", (req, res) => {
       res.status(201).send("ok")
     })
     .catch((err) => {
-      console.log(req.body.traits)
-      console.log(req.body.languages)
       res.status(500).send(err.message)
     })
+})
+
+router.put("/:id", async (req, res) => {
+  try {
+    if (!req.session.userId)
+      return res.status(403).send("You must be logged in.")
+    const { id, user_id, ...data } = req.body
+    await knex("characters")
+      .where({ id: req.params.id, user_id: req.session.userId })
+      .update(data)
+    res.send("ok")
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
 })
 
 router.delete("/:id", async (req, res) => {
@@ -175,8 +188,7 @@ router.delete("/:id", async (req, res) => {
     await knex("characters").where("id", req.params.id).del()
     res.send("ok")
   } catch (err) {
-    console.log("error:", err.message)
-    res.status(500)
+    res.status(500).send(err.message)
   }
 })
 

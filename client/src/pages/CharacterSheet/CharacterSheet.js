@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import eyeOpen from "../../assets/icons/open-eye.svg"
 import eyeClose from "../../assets/icons/closed-eye.svg"
-import { getCharacter } from "../../Api"
+import { getCharacter, updateCharacter } from "../../Api"
 import "./CharacterSheet.scss"
 import { Hexagon } from "../../Character"
 import logo from "../../assets/icons/dnd.svg"
+import { useDebouncedCallback } from "use-debounce"
+import axios from "axios"
 
 //to do onChange function for experience, level, hps, death saves
 
@@ -435,6 +437,53 @@ function Abilities({ char }) {
 function WeaponsSpells({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
+  const [attacks, setAttacks] = useState(char.attacks)
+
+  const saveAttacksToDb = useDebouncedCallback((attacks) => {
+    updateCharacter(char.id, {
+      attacks: JSON.stringify(attacks),
+    }).catch(console.error)
+  }, 1000)
+
+  useEffect(() => {
+    saveAttacksToDb(attacks)
+  }, [attacks, saveAttacksToDb])
+
+  const emptyAttack = {
+    name: "",
+    bonus: "",
+    damage: "",
+  }
+
+  function arrayUpdate(arr, index, func) {
+    return [...arr.slice(0, index), func(arr[index]), ...arr.slice(index + 1)]
+  }
+
+  function arrayRemove(arr, index) {
+    return [...arr.slice(0, index), ...arr.slice(index + 1)]
+  }
+
+  function addAttack(e) {
+    setAttacks([...attacks, emptyAttack])
+  }
+
+  function setAttack(index, field) {
+    return (e) => {
+      setAttacks(
+        arrayUpdate(attacks, index, (attack) => {
+          return {
+            ...attack,
+            [field]: e.target.value,
+          }
+        })
+      )
+    }
+  }
+  function removeAttack(index) {
+    return (e) => {
+      setAttacks(arrayRemove(attacks, index))
+    }
+  }
 
   return (
     <div className="sheet__wep-spells">
@@ -461,6 +510,47 @@ function WeaponsSpells({ char }) {
           }}
         />
       )}
+      {toggle ? (
+        <>
+          <div className="sheet__attacks">
+            <div className="sheet__attacks--header">
+              <div className="sheet__attacks--header-cell">Name</div>
+              <div className="sheet__attacks--header-cell">Atk bonus</div>
+              <div className="sheet__attacks--header-cell">Damage/Type</div>
+              <div className="sheet__attacks--header-cell"></div>
+            </div>
+            {attacks.map((a, index) => (
+              <div className="sheet__attacks--row">
+                <div className="sheet__attacks--row-cell">
+                  <input value={a.name} onChange={setAttack(index, "name")} />
+                </div>
+                <div className="sheet__attacks--row-cell">
+                  <input value={a.bonus} onChange={setAttack(index, "bonus")} />
+                </div>
+                <div className="sheet__attacks--row-cell">
+                  <input
+                    value={a.damage}
+                    onChange={setAttack(index, "damage")}
+                  />
+                </div>
+                <div className="sheet__attacks--row-cell">
+                  <button
+                    type="button"
+                    onClick={removeAttack(index)}
+                    children="X"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="sheet__attacks--add"
+            onClick={addAttack}
+            children="➕"
+          />
+        </>
+      ) : null}
     </div>
   )
 }

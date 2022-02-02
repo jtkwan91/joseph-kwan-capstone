@@ -106,6 +106,38 @@
     border-radius: 4px;
   }
 
+  &__attacks {
+    display: table;
+    background: white;
+    width: 100%;
+
+    &--header {
+      display: table-row;
+      &-cell {
+        border: 1px solid black;
+        display: table-cell;
+        padding: 0.5rem;
+        font-weight: 600;
+      }
+    }
+    &--row {
+      display: table-row;
+      &-cell {
+        border: 1px solid black;
+        display: table-cell;
+        padding: 0.5rem;
+        & > input {
+          font-family: Scala;
+          width: 100%;
+          font-size: 1rem;
+          outline: none;
+        }
+      }
+    }
+    &--add {
+    }
+  }
+
   &__misc {
     border: 1px solid black;
     padding: 1rem;
