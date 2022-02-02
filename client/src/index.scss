@@ -17,7 +17,8 @@
 body {
   margin: 0;
   font-family: Scala;
-  background: url("./assets/images/bg-plain.png");
+  background: no-repeat url("./assets/images/bg-plain.png");
+  background-size: cover;
 }
 
 h1 {

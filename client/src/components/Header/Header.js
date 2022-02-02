@@ -29,13 +29,14 @@ function Header({ setCurrentUser }) {
       </div>
       <Link to="/" className="header__title">
         D&D Character Chest
-      </Link>
-      <div className="header__right">
         {currentUser ? (
           <span className="header__welcome">
+            <br />
             Welcome, {currentUser.display_name}
           </span>
         ) : null}
+      </Link>
+      <div className="header__right">
         <button className="header__dropdown">
           <img
             className="header__dropdown-img"

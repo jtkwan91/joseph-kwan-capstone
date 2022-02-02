@@ -166,6 +166,8 @@
       width: 2rem;
       height: 2rem;
       color: #e7040f;
+      font-size: 1.25rem;
+      font-weight: 600;
       background-color: #666666;
     }
   }
@@ -190,6 +192,7 @@
       display: flex;
       flex-direction: column;
       width: 45%;
+      padding: 1rem;
     }
     &--textarea {
       font-family: Scala;
@@ -205,6 +208,7 @@
     display: flex;
     flex-direction: column;
     width: 50%;
+    padding: 1rem;
 
     &--label {
       font-weight: 700;
@@ -271,7 +275,6 @@
   height: 2.5rem;
   background-color: #666666;
   border-radius: 50%;
-  border: 2px solid #ffb700;
 }
 
 .checkbox__empty {

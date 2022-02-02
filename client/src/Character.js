@@ -21,7 +21,7 @@ export function Hexagon({ ability, bonus = 0, onChange, label }) {
       <input
         className="create__abilities--scores"
         type="text"
-        value={ability}
+        Value={ability}
         onChange={onChange}
       />
       <div className="create__abilities--scores-names">{label}</div>

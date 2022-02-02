@@ -71,15 +71,16 @@
 
     &--middle {
       display: flex;
-
-      &-title {
-        text-align: end;
-        align-self: flex-end;
-        padding-bottom: 0.25rem;
-      }
+      flex-wrap: wrap;
+      justify-content: center;
       &-value {
         align-self: center;
         padding-right: 0.5rem;
+
+        &-title {
+          width: 100%;
+          text-align: center;
+        }
       }
 
       &-open {

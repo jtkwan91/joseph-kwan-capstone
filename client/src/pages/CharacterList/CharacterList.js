@@ -72,7 +72,7 @@ function CharacterCard({ char, refresh }) {
       </div>
 
       <div className="char-list__card--middle">
-        <h3 className="char-list__card--middle-value">{char.name}, </h3>
+        <h3 className="char-list__card--middle-value-title">{char.name}, </h3>
         <h3 className="char-list__card--middle-value">the {char.race.name}</h3>
         <h3 className="char-list__card--middle-value">{char.class.name}</h3>
       </div>
