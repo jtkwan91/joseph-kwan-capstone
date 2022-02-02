@@ -520,7 +520,7 @@ function WeaponsSpells({ char }) {
               <div className="sheet__attacks--header-cell"></div>
             </div>
             {attacks.map((a, index) => (
-              <div className="sheet__attacks--row">
+              <div key={index} className="sheet__attacks--row">
                 <div className="sheet__attacks--row-cell">
                   <input value={a.name} onChange={setAttack(index, "name")} />
                 </div>
@@ -565,8 +565,10 @@ function MiscData({ char }) {
   const [traits, setTraits] = useState(char.traits.join("\n"))
   const [languages, setLanguages] = useState(char.languages.join("\n"))
   const [notes, setNotes] = useState(char.notes)
+  // const [locked, setLocked] = useState(false)
 
   const saveMiscToDb = useDebouncedCallback((data) => {
+    // setLocked(true)
     updateCharacter(char.id, {
       equipment: JSON.stringify(data.equipment.split("\n")),
       proficiencies: JSON.stringify(data.proficiencies.split("\n")),
@@ -574,6 +576,7 @@ function MiscData({ char }) {
       languages: JSON.stringify(data.languages.split("\n")),
       notes: data.notes,
     }).catch(console.error)
+    // .finally(() => setLocked(false))
   }, 1000)
 
   useEffect(() => {
@@ -624,7 +627,7 @@ function MiscData({ char }) {
                 cols="30"
                 rows="10"
                 onChange={(e) => setEquipment(e.target.value)}
-                children={equipment}
+                value={equipment}
               />
               <label className="sheet__misc--label">Proficiencies</label>
               <textarea
@@ -634,7 +637,7 @@ function MiscData({ char }) {
                 cols="30"
                 rows="10"
                 onChange={(e) => setProficiencies(e.target.value)}
-                children={proficiencies}
+                value={proficiencies}
               />
               <label className="sheet__misc--label">Languages</label>
               <textarea
@@ -644,7 +647,7 @@ function MiscData({ char }) {
                 cols="30"
                 rows="10"
                 onChange={(e) => setLanguages(e.target.value)}
-                children={languages}
+                value={languages}
               />
 
               <label className="sheet__misc--label">Traits</label>
@@ -655,7 +658,7 @@ function MiscData({ char }) {
                 cols="30"
                 rows="10"
                 onChange={(e) => setTraits(e.target.value)}
-                children={traits}
+                value={traits}
               />
             </div>
             <div className="sheet__notes">
@@ -669,7 +672,7 @@ function MiscData({ char }) {
                 cols="30"
                 rows="10"
                 onChange={(e) => setNotes(e.target.value)}
-                children={notes}
+                value={notes}
               />
             </div>
           </div>

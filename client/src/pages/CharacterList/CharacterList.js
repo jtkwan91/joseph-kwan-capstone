@@ -43,12 +43,12 @@ function CharacterCard({ char, refresh }) {
   const openModal = (e) => {
     setShow(true)
     e.preventDefault()
-    e.stopImmediatePropagation()
+    e.stopPropagation()
   }
   const closeModal = (e) => {
     setShow(false)
     e.preventDefault()
-    e.stopImmediatePropagation()
+    e.stopPropagation()
   }
 
   return (

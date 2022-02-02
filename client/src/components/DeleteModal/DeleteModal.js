@@ -12,7 +12,7 @@ function DeleteModal({ show, closeModal, char, refresh }) {
 
   return (
     <>
-      <div className={show ? "delete__overlay" : "hide"}>
+      <div className={show ? "delete__overlay" : "hide"} onClick={closeModal}>
         <div className={show ? "delete" : "hide"}>
           <div className="delete__banner">Delete</div>
           <button className="delete__x" type="button" onClick={closeModal}>
