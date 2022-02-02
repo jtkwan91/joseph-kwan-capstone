@@ -6,16 +6,25 @@ export function computeModifier(ability = 0, bonus = 0) {
   else return Math.floor((total - 10) / 2)
 }
 
-export function Hexagon({ abilityBonus = 0, abilities, bonuses }) {
+export function Hexagon({ ability, bonus = 0, onChange, label }) {
   return (
-    <div className="create__hex">
-      <img src={hex} alt="hexagon" />
-      <span className="create__hex--modifier">
-        {computeModifier(abilities, bonuses)}
-      </span>
-      {abilityBonus === 0 ? null : (
-        <div className="create__hex--bonus">+{abilityBonus}</div>
-      )}
+    <div className="create__hex--item">
+      <div className="create__hex">
+        <img src={hex} alt="hexagon" />
+        <span className="create__hex--modifier">
+          {computeModifier(ability, bonus)}
+        </span>
+        {bonus === 0 ? null : (
+          <div className="create__hex--bonus">+{bonus}</div>
+        )}
+      </div>
+      <input
+        className="create__abilities--scores"
+        type="text"
+        value={ability}
+        onChange={onChange}
+      />
+      <div className="create__abilities--scores-names">{label}</div>
     </div>
   )
 }

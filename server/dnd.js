@@ -1,41 +1,36 @@
-const axios = require('axios')
+const axios = require("axios")
 const API_URL = "https://www.dnd5eapi.co/api"
-const SERVER_URL = "http://localhost:8080"
-const clientServ = axios.create({
-    baseURL: SERVER_URL
-})
-const client = axios.create({
-    baseURL: API_URL
-})
+const backgrounds = require("./data/backgrounds.json")
+
+const cache = new Map()
+
+function getCached(url) {
+  if (cache.has(url)) {
+    return cache.get(url)
+  }
+  const result = axios.get(url).then((response) => response.data)
+  cache.set(url, result)
+  return result
+}
 
 function getRace(index) {
-    return client
-    .get(`/races/${index}`)
-    .then((response) => response.data)
+  return getCached(`${API_URL}/races/${index}`)
 }
 
 function getSubRace(index) {
-    return index
-    ? client.get(`/subraces/${index}`).then((response) => response.data)
-    : null
+  return index ? getCached(`${API_URL}/subraces/${index}`) : null
 }
 
 function getClass(index) {
-    return client
-    .get(`/classes/${index}`)
-    .then((response) => response.data)
+  return getCached(`${API_URL}/classes/${index}`)
 }
 
 function getArchetype(index) {
-    return index
-    ? client.get(`/subclasses/${index}`).then((response) => response.data)
-    : null
+  return index ? getCached(`${API_URL}/subclasses/${index}`) : null
 }
 
 function getBackground(index) {
-    return clientServ
-    .get(`/backgrounds/${index}`)
-    .then((response) => response.data)
+  return backgrounds.find((background) => background.index === index)
 }
 
-module.exports = {getRace, getClass, getSubRace, getArchetype, getBackground}
+module.exports = { getRace, getClass, getSubRace, getArchetype, getBackground }

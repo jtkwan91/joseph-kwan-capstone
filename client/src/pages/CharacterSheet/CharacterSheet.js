@@ -1,36 +1,40 @@
 import React, { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import eyeOpen from "../../assets/icons/open-eye.svg"
 import eyeClose from "../../assets/icons/closed-eye.svg"
-import { getCharacter } from "../../Api"
+import { getCharacter, updateCharacter } from "../../Api"
 import "./CharacterSheet.scss"
+import { Hexagon } from "../../Character"
+import logo from "../../assets/icons/dnd.svg"
+import { useDebouncedCallback } from "use-debounce"
 
 //to do onChange function for experience, level, hps, death saves
 
 function CharacterSheet() {
-  const [charDetails, setCharDetails] = useState(null)
+  const [char, setCharDetails] = useState(null)
 
+  const navigate = useNavigate()
   const params = useParams()
 
   useEffect(() => {
     getCharacter(params.id)
       .then(setCharDetails)
       .catch((err) => {
-        console.error(err.message)
+        navigate("/")
       })
-  }, [params.id])
+  }, [navigate, params.id])
 
   return (
     <div className="sheet">
       <div className="sheet__card">
-        {charDetails ? (
+        {char ? (
           <>
-            {/* <pre>{JSON.stringify(charDetails, null, 2)}</pre> */}
-            <CharDetails charDetails={charDetails} />
-            <Core charDetails={charDetails} />
-            <Abilities charDetails={charDetails} />
-            <WeaponsSpells charDetails={charDetails} />
-            <MiscData charDetails={charDetails} />
+            {/* <pre>{JSON.stringify(char, null, 2)}</pre> */}
+            <CharDetails char={char} />
+            <Core char={char} />
+            <Abilities char={char} />
+            <WeaponsSpells char={char} />
+            <MiscData char={char} />
           </>
         ) : (
           <p>Loading...</p>
@@ -42,7 +46,7 @@ function CharacterSheet() {
 
 export default CharacterSheet
 
-function CharDetails({ charDetails }) {
+function CharDetails({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
 
@@ -76,11 +80,19 @@ function CharDetails({ charDetails }) {
       {toggle ? (
         <div className="sheet__details--container">
           <div className="sheet__details--avatar-container">
-            <img
-              className="sheet__details--avatar"
-              src={charDetails.avatar}
-              alt="avatar"
-            />
+            {char.avatar ? (
+              <img
+                className="char-list__card--left-avatar"
+                src={`http://localhost:8080/characters/${char.id}/avatar`}
+                alt="avatar"
+              />
+            ) : (
+              <img
+                className="char-list__card--left-avatar"
+                src={logo}
+                alt="avatar"
+              />
+            )}
           </div>
           <div className="sheet__details--info">
             <div className="sheet__details--element">
@@ -88,11 +100,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-name"
               >
-                Name:{" "}
+                Name:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.name}
+                defaultValue={char.name}
               />
             </div>
 
@@ -101,11 +113,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-race"
               >
-                Race:{" "}
+                Race:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.race.name}
+                defaultValue={char.race.name}
               />
             </div>
 
@@ -114,11 +126,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-subrace"
               >
-                Subrace:{" "}
+                Subrace:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.subrace.name}
+                defaultValue={char.subrace?.name ?? ""}
               />
             </div>
 
@@ -127,11 +139,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-class"
               >
-                Class:{" "}
+                Class:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.class.name}
+                defaultValue={char.class.name}
               />
             </div>
 
@@ -140,11 +152,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-archetype"
               >
-                Archetype:{" "}
+                Archetype:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.archetype.name}
+                defaultValue={char.archetype?.name ?? ""}
               />
             </div>
 
@@ -153,11 +165,11 @@ function CharDetails({ charDetails }) {
                 className="sheet__details--element-title"
                 htmlFor="char-background"
               >
-                Background:{" "}
+                Background:
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.background.name}
+                defaultValue={char.background?.name ?? ""}
               />
             </div>
 
@@ -170,7 +182,7 @@ function CharDetails({ charDetails }) {
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.exp}
+                defaultValue={char.exp}
               />
             </div>
             <div className="sheet__details--element">
@@ -179,7 +191,7 @@ function CharDetails({ charDetails }) {
               </label>
               <input
                 className="sheet__details--element-input"
-                defaultValue={charDetails.level}
+                defaultValue={char.level}
               />
             </div>
           </div>
@@ -189,15 +201,37 @@ function CharDetails({ charDetails }) {
   )
 }
 
-function Core({ charDetails }) {
+function useCheckbox(initialState, yes, no) {
+  const [checked, setChecked] = useState(initialState)
+  return [
+    checked,
+    <div onClick={(e) => setChecked(!checked)} className="stat-block__input">
+      {checked ? (
+        <div className="checkbox__checked"> {yes} </div>
+      ) : (
+        <div className="checkbox__empty"> {no} </div>
+      )}
+    </div>,
+  ]
+}
+
+function Core({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
+  const [_fail1, fail1button] = useCheckbox(false, "💀", "")
+  const [_fail2, fail2button] = useCheckbox(false, "💀", "")
+  const [_fail3, fail3button] = useCheckbox(false, "💀", "")
+  const [_pass1, pass1button] = useCheckbox(false, "💚", "")
+  const [_pass2, pass2button] = useCheckbox(false, "💚", "")
+  const [_pass3, pass3button] = useCheckbox(false, "💚", "")
+  const [_inspiration, inspirationButton] = useCheckbox(false, "💡", "")
 
   return (
     <div className="sheet__core">
       {/* AC, initiative, speed, current hp, max hp, temp hp, hit dice, death saves,
       proficiency bonus, inspiration go here */}
       <h1 className="sheet__titles">Core</h1>
+
       {eyecon ? (
         <img
           className="toggle"
@@ -221,134 +255,95 @@ function Core({ charDetails }) {
       )}
       {toggle ? (
         <div className="sheet__core--details">
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="initiative">
-              Initiative:{" "}
-            </label>
-            <input
-              className="stat-block__input"
-              id="initiative"
-              defaultValue={0}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="inspiration">
-              Inspiration
-            </label>
-            <input
-              className="stat-block__input"
-              id="inspiration"
-              type="checkbox"
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="speed">
-              Speed:{" "}
-            </label>
-            <input
-              className="stat-block__input"
-              id="speed"
-              defaultValue={charDetails.speed}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="proficiency">
-              Proficency
-            </label>
-            <input
-              className="stat-block__input"
-              id="proficiency"
-              defaultValue={`+${2}`}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="current_hp">
-              Current HP
-            </label>
-            <input
-              className="stat-block__input"
-              name="current_hp"
-              id="current_hp"
-              defaultValue={charDetails.current_hp}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="max_hp">
-              Max HP
-            </label>
-            <input
-              className="stat-block__input"
-              name="max_hp"
-              id="max_hp"
-              defaultValue={charDetails.max_hp}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="temp_hp">
-              Temp HP
-            </label>
-            <input
-              className="stat-block__input"
-              name="temp_hp"
-              id="temp_hp"
-              defaultValue={charDetails.temp_hp}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="hit_die">
-              Hit Die
-            </label>
-            <input
-              className="stat-block__input"
-              name="hit_die"
-              id="hit_die"
-              defaultValue={charDetails.class.hit_die}
-            />
-          </div>
-          <div className="stat-block">
-            <h3 className="stat-block__label">Death Saves</h3>
-            <div className="death-saves">
-              <label htmlFor="death_fail" className="death-saves__title">
-                Fail
+          <div className="sheet__core--health">
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="current_hp">
+                Current HP
               </label>
               <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_fail"
-              />
-
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_fail"
-              />
-
-              <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_fail"
+                className="stat-block__input Hp"
+                name="current_hp"
+                id="current_hp"
+                defaultValue={`${char.current_hp}/${char.max_hp}`}
               />
             </div>
-            <div className="death-saves">
-              <label htmlFor="death_passes" className="death-saves__title">
-                Pass
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="temp_hp">
+                Temp HP
               </label>
               <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_pass"
+                className="stat-block__input Hp"
+                name="temp_hp"
+                id="temp_hp"
+                defaultValue={char.temp_hp}
               />
-
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="hit_die">
+                Hit Die
+              </label>
               <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_pass"
+                className="stat-block__input Hp"
+                name="hit_die"
+                id="hit_die"
+                defaultValue={`${1 * char.level}d${char.class.hit_die}`}
               />
-
+            </div>
+            <div className="stat-block">
+              <h3 className="stat-block__label">Death Saves</h3>
+              <div className="death-saves">
+                <label htmlFor="death_passes" className="death-saves__title">
+                  Fail
+                </label>
+                {fail1button}
+                {fail2button}
+                {fail3button}
+              </div>
+              <div className="death-saves">
+                <label htmlFor="death_passes" className="death-saves__title">
+                  Pass
+                </label>
+                {pass1button}
+                {pass2button}
+                {pass3button}
+              </div>
+            </div>
+          </div>
+          <div className="sheet__core--other">
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="initiative">
+                Initiative
+              </label>
               <input
-                className="stat-block__input death-saves__input"
-                type="checkbox"
-                id="death_pass"
+                className="stat-block__input"
+                id="initiative"
+                defaultValue={0}
+              />
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="inspiration">
+                Inspiration
+              </label>
+              {inspirationButton}
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="speed">
+                Speed
+              </label>
+              <input
+                className="stat-block__input"
+                id="speed"
+                defaultValue={char.speed}
+              />
+            </div>
+            <div className="stat-block">
+              <label className="stat-block__label" htmlFor="proficiency">
+                Proficiency
+              </label>
+              <input
+                className="stat-block__input"
+                id="proficiency"
+                defaultValue={`+${Math.ceil(2 + (0.25 * char.level - 1))}`}
               />
             </div>
           </div>
@@ -358,7 +353,7 @@ function Core({ charDetails }) {
   )
 }
 
-function Abilities({ charDetails }) {
+function Abilities({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
 
@@ -389,59 +384,42 @@ function Abilities({ charDetails }) {
       )}
       {toggle ? (
         <div className="sheet__abilities--details">
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              STR
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_str}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              DEX
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_dex}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              CON
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_con}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              INT
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_int}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              WIS
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_wis}
-            />
-          </div>
-          <div className="stat-block">
-            <label className="stat-block__label" htmlFor="abi">
-              CHA
-            </label>
-            <input
-              className="stat-block__input"
-              defaultValue={charDetails.abi_cha}
-            />
+          <div className="create__abilities">
+            <div className="create__abilities--hexes">
+              <Hexagon
+                label="STR"
+                ability={char.abi_str}
+                onChange={() => console.log("todo update: str")}
+              />
+              <Hexagon
+                label="DEX"
+                ability={char.abi_dex}
+                onChange={() => console.log("todo update: dex")}
+              />
+              <Hexagon
+                label="CON"
+                ability={char.abi_con}
+                onChange={() => console.log("todo update: con")}
+              />
+            </div>
+
+            <div className="create__abilities--hexes">
+              <Hexagon
+                label="INT"
+                ability={char.abi_int}
+                onChange={() => console.log("todo update: int")}
+              />
+              <Hexagon
+                label="WIS"
+                ability={char.abi_wis}
+                onChange={() => console.log("todo update: wis")}
+              />
+              <Hexagon
+                label="CHA"
+                ability={char.abi_cha}
+                onChange={() => console.log("todo update: cha")}
+              />
+            </div>
           </div>
         </div>
       ) : null}
@@ -449,9 +427,56 @@ function Abilities({ charDetails }) {
   )
 }
 
-function WeaponsSpells({ charDetails }) {
+function WeaponsSpells({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
+  const [attacks, setAttacks] = useState(char.attacks)
+
+  const saveAttacksToDb = useDebouncedCallback((attacks) => {
+    updateCharacter(char.id, {
+      attacks: JSON.stringify(attacks),
+    }).catch(console.error)
+  }, 1000)
+
+  useEffect(() => {
+    saveAttacksToDb(attacks)
+  }, [attacks, saveAttacksToDb])
+
+  const emptyAttack = {
+    name: "",
+    bonus: "",
+    damage: "",
+  }
+
+  function arrayUpdate(arr, index, func) {
+    return [...arr.slice(0, index), func(arr[index]), ...arr.slice(index + 1)]
+  }
+
+  function arrayRemove(arr, index) {
+    return [...arr.slice(0, index), ...arr.slice(index + 1)]
+  }
+
+  function addAttack(e) {
+    setAttacks([...attacks, emptyAttack])
+  }
+
+  function setAttack(index, field) {
+    return (e) => {
+      setAttacks(
+        arrayUpdate(attacks, index, (attack) => {
+          return {
+            ...attack,
+            [field]: e.target.value,
+          }
+        })
+      )
+    }
+  }
+  function removeAttack(index) {
+    return (e) => {
+      setAttacks(arrayRemove(attacks, index))
+    }
+  }
 
   return (
     <div className="sheet__wep-spells">
@@ -478,13 +503,85 @@ function WeaponsSpells({ charDetails }) {
           }}
         />
       )}
+      {toggle ? (
+        <>
+          <div className="sheet__attacks">
+            <div className="sheet__attacks--header">
+              <div className="sheet__attacks--header-cell">Name</div>
+              <div className="sheet__attacks--header-cell">Atk bonus</div>
+              <div className="sheet__attacks--header-cell">Damage/Type</div>
+              <div className="sheet__attacks--header-cell"></div>
+            </div>
+            {attacks.map((a, index) => (
+              <div key={index} className="sheet__attacks--row">
+                <div className="sheet__attacks--row-cell">
+                  <input value={a.name} onChange={setAttack(index, "name")} />
+                </div>
+                <div className="sheet__attacks--row-cell">
+                  <input value={a.bonus} onChange={setAttack(index, "bonus")} />
+                </div>
+                <div className="sheet__attacks--row-cell">
+                  <input
+                    value={a.damage}
+                    onChange={setAttack(index, "damage")}
+                  />
+                </div>
+                <div className="sheet__attacks--row-cell">
+                  <button
+                    type="button"
+                    className="sheet__attacks--remove"
+                    onClick={removeAttack(index)}
+                    children="X"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="sheet__attacks--add"
+            onClick={addAttack}
+            children="+"
+          />
+        </>
+      ) : null}
     </div>
   )
 }
 
-function MiscData({ charDetails }) {
+function MiscData({ char }) {
   const [toggle, setToggle] = useState(true)
   const [eyecon, setEyecon] = useState(true)
+  const [equipment, setEquipment] = useState(char.equipment.join("\n"))
+  const [proficiencies, setProficiencies] = useState(
+    char.proficiencies.join("\n")
+  )
+  const [traits, setTraits] = useState(char.traits.join("\n"))
+  const [languages, setLanguages] = useState(char.languages.join("\n"))
+  const [notes, setNotes] = useState(char.notes)
+  // const [locked, setLocked] = useState(false)
+
+  const saveMiscToDb = useDebouncedCallback((data) => {
+    // setLocked(true)
+    updateCharacter(char.id, {
+      equipment: JSON.stringify(data.equipment.split("\n")),
+      proficiencies: JSON.stringify(data.proficiencies.split("\n")),
+      traits: JSON.stringify(data.traits.split("\n")),
+      languages: JSON.stringify(data.languages.split("\n")),
+      notes: data.notes,
+    }).catch(console.error)
+    // .finally(() => setLocked(false))
+  }, 1000)
+
+  useEffect(() => {
+    saveMiscToDb({
+      equipment,
+      proficiencies,
+      traits,
+      languages,
+      notes,
+    })
+  }, [equipment, languages, notes, proficiencies, saveMiscToDb, traits])
 
   return (
     <div className="sheet__misc">
@@ -514,36 +611,65 @@ function MiscData({ charDetails }) {
       )}
       {toggle ? (
         <div>
-          <h4>Equipment</h4>
-          <ul>
-            {charDetails.class.starting_equipment.map((e) => (
-              <li key={e.equipment.index}>{e.equipment.name}</li>
-            ))}
-            {charDetails.background.starting_equipment.map((e) => (
-              <li key={e.equipment.index}>{e.equipment.name}</li>
-            ))}
-          </ul>
-          <h4>Proficiencies</h4>
-          <ul>
-            {charDetails.race.starting_proficiencies.map((p) => (
-              <li key={p.index}>{p.name}</li>
-            ))}
-            {charDetails.class.proficiencies.map((p) => (
-              <li key={p.index}>{p.name}</li>
-            ))}
-          </ul>
-          <h4>Languages</h4>
-          <ul>
-            {charDetails.race.languages.map((l) => (
-              <li key={l.index}>{l.name}</li>
-            ))}
-          </ul>
-          <h4>Traits</h4>
-          <ul>
-            {charDetails.race.traits.map((t) => (
-              <li key={t.index}>{t.name}</li>
-            ))}
-          </ul>
+          <div className="sheet__misc--info">
+            <div className="sheet__misc--lists">
+              <label className="sheet__misc--label">Equipment</label>
+              <textarea
+                name="equipment"
+                className="sheet__misc--textarea"
+                id="misc-equipment"
+                cols="30"
+                rows="10"
+                onChange={(e) => setEquipment(e.target.value)}
+                value={equipment}
+              />
+              <label className="sheet__misc--label">Proficiencies</label>
+              <textarea
+                name="proficiencies"
+                className="sheet__misc--textarea"
+                id="misc-proficiencies"
+                cols="30"
+                rows="10"
+                onChange={(e) => setProficiencies(e.target.value)}
+                value={proficiencies}
+              />
+              <label className="sheet__misc--label">Languages</label>
+              <textarea
+                name="languages"
+                className="sheet__misc--textarea"
+                id="misc-languages"
+                cols="30"
+                rows="10"
+                onChange={(e) => setLanguages(e.target.value)}
+                value={languages}
+              />
+
+              <label className="sheet__misc--label">Traits</label>
+              <textarea
+                name="traits"
+                className="sheet__misc--textarea"
+                id="misctraits"
+                cols="30"
+                rows="10"
+                onChange={(e) => setTraits(e.target.value)}
+                value={traits}
+              />
+            </div>
+            <div className="sheet__notes">
+              <label className="sheet__notes--label" htmlFor="notes">
+                Notes
+              </label>
+              <textarea
+                className="sheet__notes--textarea"
+                name="notes"
+                id="notes"
+                cols="30"
+                rows="10"
+                onChange={(e) => setNotes(e.target.value)}
+                value={notes}
+              />
+            </div>
+          </div>
         </div>
       ) : null}
     </div>
