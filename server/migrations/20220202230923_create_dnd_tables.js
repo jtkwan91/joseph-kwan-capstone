@@ -13,7 +13,7 @@ exports.up = function (knex) {
     })
     .createTable("characters", function (table) {
       table.increments("id").primary().notNullable()
-      table.string("user_id").notNullable()
+      table.integer("user_id").notNullable()
       table.string("name")
       table.specificType("avatar", "mediumblob")
       table.string("race").notNullable()

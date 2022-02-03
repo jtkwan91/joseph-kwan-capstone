@@ -17,8 +17,8 @@
 body {
   margin: 0;
   font-family: Scala;
-  background: no-repeat url("./assets/images/bg-plain.png");
-  background-size: cover;
+  background: url("./assets/images/bg-plain.png");
+  background-size: 100% 100%;
 }
 
 h1 {
@@ -35,4 +35,8 @@ a,
 a:visited {
   text-decoration: none;
   color: inherit;
+}
+
+.home {
+  flex-grow: 1;
 }
