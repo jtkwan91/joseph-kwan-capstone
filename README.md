@@ -4,17 +4,17 @@ For my capstone project I made an app that you can login, create, track and dele
 
 To run this project, you must first start the express server and setup the database,
 
-'''sh
+```sh
 $ Open MySQL and create a new scheme called dnd
 
-````
+```
 
 ```sh
 $ cd server
 $ npm i
 $ knex migrate:latest
 $ npm start
-````
+```
 
 You will see the following message:
 
