@@ -648,7 +648,7 @@ function MiscData({ char }) {
               <textarea
                 name="traits"
                 className="sheet__misc--textarea"
-                id="misctraits"
+                id="miscTraits"
                 cols="30"
                 rows="10"
                 onChange={(e) => setTraits(e.target.value)}

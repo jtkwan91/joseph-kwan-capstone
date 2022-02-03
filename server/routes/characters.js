@@ -17,7 +17,7 @@ const {
 //         res.json(data)
 //     })
 //     .catch((err) => {
-//         res.status(500).send("Error getting chracters")
+//         res.status(500).send("Error getting characters")
 //     })
 // })
 
