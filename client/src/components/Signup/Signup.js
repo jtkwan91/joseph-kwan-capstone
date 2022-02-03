@@ -17,7 +17,6 @@ function Signup() {
     else
       registerUser({ email, password, display })
         .then((response) => {
-          alert("Thanks for signing up! Login to get started.")
           navigate("/")
         })
         .catch((err) => {

@@ -41,6 +41,7 @@
     border-radius: 10px;
     margin-bottom: 1rem;
     box-shadow: 5px 5px 2px 2px #666666;
+    max-width: 49.125rem;
 
     &--left {
       display: flex;
@@ -71,15 +72,16 @@
 
     &--middle {
       display: flex;
-
-      &-title {
-        text-align: end;
-        align-self: flex-end;
-        padding-bottom: 0.25rem;
-      }
+      flex-wrap: wrap;
+      justify-content: center;
       &-value {
         align-self: center;
         padding-right: 0.5rem;
+
+        &-title {
+          width: 100%;
+          text-align: center;
+        }
       }
 
       &-open {

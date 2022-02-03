@@ -15,7 +15,7 @@
   &__title {
     font-family: Draconis;
     justify-self: center;
-    font-size: 32px;
+    font-size: 1.5rem;
     text-align: center;
     text-decoration: none;
     color: white;
@@ -26,8 +26,9 @@
   }
 
   &__welcome {
-    color: white;
+    color: #e7040f;
     margin-right: 1rem;
+    font-size: 16px;
   }
   &__dropdown {
     border: 2px solid #ffb700;
@@ -53,23 +54,26 @@
       flex-direction: column;
       text-align: end;
       position: absolute;
-      right: 1rem;
+      right: 0rem;
       background-color: #666666;
-      top: 75px;
+      top: 2.75rem;
       border-radius: 4px;
       z-index: 1;
       text-shadow: 1px 1px black;
+      border: 2px solid #ffb700;
 
       &--item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 0.75rem;
         text-decoration: none;
         color: #ffb700;
         font-weight: 600;
+        width: 7.5rem;
         height: 2rem;
-        padding: 0.5rem 1rem;
-        border-top: 1px solid #ffb700;
-        border-bottom: 1px solid #ffb700;
         border-radius: 4px;
+        border-bottom: 1px solid #ffb700;
 
         &:visited {
           color: #ffb700;
@@ -82,15 +86,16 @@
     height: 4rem;
 
     &-container {
-      width: 11rem;
+      width: 25%;
     }
   }
 
   &__right {
-    width: 11rem;
+    width: 25%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    position: relative;
   }
 }
 

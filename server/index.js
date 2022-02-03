@@ -4,7 +4,7 @@ const cors = require("cors")
 const session = require("express-session")
 const SessionStore = require("session-file-store")(session)
 
-const PORT = process.env.PORT || 8080
+const PORT = 8080
 const SESSION_SECRET = `3c77f790a1f249ffd56cd282f45bed15926060fb3656a9c1e24360e71a84a7a0`
 
 app.use(

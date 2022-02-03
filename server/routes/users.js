@@ -7,17 +7,6 @@ function hash(s) {
   return crypto.createHash("md5").update(s).digest("hex")
 }
 
-// router.get('/setsession', (req,res) => {
-//     req.session.boobs = Math.random()
-//     res.send("session set")
-// })
-
-// router.get('/getsession', (req,res) => {
-//     res.json({
-//         boobs: req.session.boobs
-//     })
-// })
-
 router.post("/register", (req, res) => {
   knex("users")
     .insert({
