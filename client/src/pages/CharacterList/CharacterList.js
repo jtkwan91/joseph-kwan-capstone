@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import "./CharacterList.scss"
 import trash from "../../assets/icons/trash.svg"
 import DeleteModal from "../../components/DeleteModal/DeleteModal"
-import { getCharacters } from "../../Api"
+import { avatarUrl, getCharacters } from "../../Api"
 import logo from "../../assets/icons/dnd.svg"
 // todo import context
 
@@ -57,7 +57,7 @@ function CharacterCard({ char, refresh }) {
         {char.avatar ? (
           <img
             className="char-list__card--left-avatar"
-            src={`http://localhost:8080/characters/${char.id}/avatar`}
+            src={avatarUrl(char.id)}
             alt="avatar"
           />
         ) : (

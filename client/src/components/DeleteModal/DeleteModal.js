@@ -1,6 +1,6 @@
 import React from "react"
 import "./DeleteModal.scss"
-import { delCharacter } from "../../Api"
+import { avatarUrl, delCharacter } from "../../Api"
 import logo from "../../assets/icons/dnd.svg"
 
 function DeleteModal({ show, closeModal, char, refresh }) {
@@ -21,7 +21,7 @@ function DeleteModal({ show, closeModal, char, refresh }) {
           {char.avatar ? (
             <img
               className="delete__avatar"
-              src={`http://localhost:8080/characters/${char.id}/avatar`}
+              src={avatarUrl(char.id)}
               alt="avatar"
             />
           ) : (

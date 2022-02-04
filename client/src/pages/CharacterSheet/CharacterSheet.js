@@ -4,7 +4,7 @@ import { useDebouncedCallback } from "use-debounce"
 import "./CharacterSheet.scss"
 import { EyeOpen, EyeClose } from "../../components/Icons"
 import logo from "../../assets/icons/dnd.svg"
-import { getCharacter, updateCharacter } from "../../Api"
+import { avatarUrl, getCharacter, updateCharacter } from "../../Api"
 import { Hexagon } from "../../Character"
 
 // generics
@@ -108,7 +108,7 @@ function CharDetails({ char, persist }) {
                 {char.avatar ? (
                   <img
                     className="char-list__card--left-avatar"
-                    src={`http://localhost:8080/characters/${char.id}/avatar`}
+                    src={avatarUrl(char.id)}
                     alt="avatar"
                   />
                 ) : (

@@ -3,10 +3,9 @@ import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import "./CreateCharacter.scss"
 import upload from "../../assets/icons/upload.svg"
-import { addCharacter } from "../../Api"
+import { addCharacter, getBackground, getBackgrounds } from "../../Api"
 import { Hexagon, computeHp, randomInt } from "../../Character"
 const API_URL = `https://www.dnd5eapi.co`
-const SERVER_URL = `http://localhost:8080`
 
 function reshapeAbilityBonus(t) {
   return { [t.ability_score.index]: t.bonus }
@@ -107,9 +106,7 @@ function CreateCharacter() {
     axios.get(`${API_URL}/api/classes`).then((response) => {
       setCharClasses(response.data.results)
     })
-    axios.get(`http://localhost:8080/backgrounds`).then((response) => {
-      setBackgrounds(response.data)
-    })
+    getBackgrounds().then(setBackgrounds)
   }
 
   useEffect(() => {
@@ -151,8 +148,8 @@ function CreateCharacter() {
 
   useEffect(() => {
     if (background === "") return
-    axios.get(`${SERVER_URL}/backgrounds/${background}`).then((response) => {
-      setBackgroundEquipment(response.data.starting_equipment)
+    getBackground(background).then(response => {
+      setBackgroundEquipment(response.starting_equipment)
     })
   }, [background])
 

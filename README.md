@@ -13,35 +13,20 @@ There are additional features I wanted to add including more subraces, classes, 
 ![chardeets](https://user-images.githubusercontent.com/90243125/152275506-7043ace7-8a98-47d6-8562-960d9744af66.PNG)
 
 
-To run this project, you must first start the express server and setup the database,
+To run this project 
 
 ```sh
-$ Open MySQL and create a new scheme called dnd
-
+$ docker-compose up -d
 ```
 
-```sh
-$ cd server
-$ npm i
-$ knex migrate:latest
-$ npm start
-```
+> **todo:**
+Fix race condition of server starting before mysql.
 
-You will see the following message:
+> Sometimes this service starts before mysql is ready and the migration cannot run.
 
-```none
-app running on port 8080
-```
+> You may have to run migration manually or retry docker-compose up
 
-In another terminal start the React app normally,
-
-```sh
-cd client
-$ npm i
-$ npm start
-```
-
-And access the app by visiting
+Access the app by visiting
 
 ```none
 http://localhost:3000

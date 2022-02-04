@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  client:
+    image: node:17
+    environment:
+      # https://github.com/facebook/create-react-app/issues/11897
+      # https://github.com/facebook/create-react-app/issues/11779
+      - WDS_SOCKET_PORT=0
+    command: sh -c "npm i && PORT=80 npm start"
+    working_dir: /main
+    ports:
+      - 3000:80
+    volumes:
+      - ./client:/main
+  server:
+    image: node:17
+    # todo: fix race condition of server starting before mysql
+    # sometimes this service starts before mysql is ready and the migration cannot run
+    # you may have to run migration manually or retry docker-compose up
+    command: sh -c "npm i && npm exec knex migrate:latest && PORT=80 npm start"
+    working_dir: /main
+    ports:
+      - 3001:80
+    volumes:
+      - ./server:/main
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dnd
+    # ports:
+    #   - 3002:3306
+    volumes:
+      - jtkwan91_mysql:/var/lib/mysql
+
+volumes:
+  jtkwan91_mysql:
