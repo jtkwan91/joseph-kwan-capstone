@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDebouncedCallback } from "use-debounce"
 import "./CharacterSheet.scss"
-import eyeOpen from "../../assets/icons/open-eye.svg"
-import eyeClose from "../../assets/icons/closed-eye.svg"
+import { EyeOpen, EyeClose } from "../../components/Icons"
 import logo from "../../assets/icons/dnd.svg"
 import { getCharacter, updateCharacter } from "../../Api"
 import { Hexagon } from "../../Character"
@@ -651,12 +650,12 @@ function ToggleBox({ title, init = true, children }) {
   return (
     <div className="sheet__details">
       <h1 className="sheet__titles">Character</h1>
-      <img
-        className="toggle"
-        src={open ? eyeOpen : eyeClose}
-        alt="eyecon"
-        onClick={(_) => setOpen(!open)}
-      />
+      <div className="toggle" onClick={() => setOpen(!open)}>
+        { open
+        ? <EyeOpen />
+        : <EyeClose />
+        }
+      </div>
       {children(open)}{" "}
       {/* calling children as a function is a "render prop", see react docs */}
     </div>
