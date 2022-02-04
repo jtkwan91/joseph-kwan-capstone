@@ -158,6 +158,7 @@ router.post("/", (req, res) => {
         proficiencies: req.body.proficiencies,
         languages: req.body.languages,
         notes: null,
+        hitdie: req.body.hitdie,
       })
     )
     .then(() => {
