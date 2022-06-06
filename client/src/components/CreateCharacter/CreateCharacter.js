@@ -76,6 +76,7 @@ function CreateCharacter() {
       traits,
       proficiencies: [...raceProficiencies, ...classProficiencies],
       languages,
+      hitdie: `1d${hitdie}`
     })
       .then((response) => {
         navigate("/")

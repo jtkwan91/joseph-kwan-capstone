@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootroot
+      MYSQL_DATABASE: dnd
+    ports:
+      - 9999:3306
+    volumes:
+      - dnd_mysql:/var/lib/mysql
+
+volumes:
+  dnd_mysql:
