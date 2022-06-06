@@ -1,206 +1,22 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import eyeOpen from "../../assets/icons/open-eye.svg"
-import eyeClose from "../../assets/icons/closed-eye.svg"
-import { getCharacter, updateCharacter } from "../../Api"
-import "./CharacterSheet.scss"
-import { Hexagon } from "../../Character"
-import logo from "../../assets/icons/dnd.svg"
 import { useDebouncedCallback } from "use-debounce"
+import "./CharacterSheet.scss"
+import { EyeOpen, EyeClose } from "../../components/Icons"
+import logo from "../../assets/icons/dnd.svg"
+import { getCharacter, updateCharacter } from "../../Api"
+import { Hexagon } from "../../Character"
 
-//to do onChange function for experience, level, hps, death saves
-
-function CharacterSheet() {
-  const [char, setCharDetails] = useState(null)
-
-  const navigate = useNavigate()
-  const params = useParams()
-
-  useEffect(() => {
-    getCharacter(params.id)
-      .then(setCharDetails)
-      .catch((err) => {
-        navigate("/")
-      })
-  }, [navigate, params.id])
-
-  return (
-    <div className="sheet">
-      <div className="sheet__card">
-        {char ? (
-          <>
-            {/* <pre>{JSON.stringify(char, null, 2)}</pre> */}
-            <CharDetails char={char} />
-            <Core char={char} />
-            <Abilities char={char} />
-            <WeaponsSpells char={char} />
-            <MiscData char={char} />
-          </>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
-    </div>
-  )
+// generics
+function arrayUpdate(arr, index, func) {
+  return [...arr.slice(0, index), func(arr[index]), ...arr.slice(index + 1)]
 }
 
-export default CharacterSheet
-
-function CharDetails({ char }) {
-  const [toggle, setToggle] = useState(true)
-  const [eyecon, setEyecon] = useState(true)
-
-  return (
-    <div className="sheet__details">
-      {/* avatar, name, race, subrace, class, archetype, background, exp, lvl go
-      here */}
-      <h1 className="sheet__titles">Character</h1>
-      {eyecon ? (
-        <img
-          className="toggle"
-          src={eyeOpen}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      ) : (
-        <img
-          className="toggle"
-          src={eyeClose}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      )}
-
-      {toggle ? (
-        <div className="sheet__details--container">
-          <div className="sheet__details--avatar-container">
-            {char.avatar ? (
-              <img
-                className="char-list__card--left-avatar"
-                src={`http://localhost:8080/characters/${char.id}/avatar`}
-                alt="avatar"
-              />
-            ) : (
-              <img
-                className="char-list__card--left-avatar"
-                src={logo}
-                alt="avatar"
-              />
-            )}
-          </div>
-          <div className="sheet__details--info">
-            <div className="sheet__details--element">
-              <label
-                className="sheet__details--element-title"
-                htmlFor="char-name"
-              >
-                Name:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.name}
-              />
-            </div>
-
-            <div className="sheet__details--element">
-              <label
-                className="sheet__details--element-title"
-                htmlFor="char-race"
-              >
-                Race:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.race.name}
-              />
-            </div>
-
-            <div className="sheet__details--element">
-              <label
-                className="sheet__details--element-title"
-                htmlFor="char-subrace"
-              >
-                Subrace:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.subrace?.name ?? ""}
-              />
-            </div>
-
-            <div className="sheet__details--element">
-              <label
-                className="sheet__details--element-title"
-                htmlFor="char-class"
-              >
-                Class:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.class.name}
-              />
-            </div>
-
-            <div className="sheet__details--element">
-              <label
-                className="sheet__details--element-title"
-                htmlFor="char-archetype"
-              >
-                Archetype:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.archetype?.name ?? ""}
-              />
-            </div>
-
-            <div className="sheet__details--element">
-              <label
-                className="sheet__details--element-title"
-                htmlFor="char-background"
-              >
-                Background:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.background?.name ?? ""}
-              />
-            </div>
-
-            <div className="sheet__details--element">
-              <label
-                className="sheet__details--element-title"
-                htmlFor="experience"
-              >
-                Experience:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.exp}
-              />
-            </div>
-            <div className="sheet__details--element">
-              <label className="sheet__details--element-title" htmlFor="level">
-                Level:
-              </label>
-              <input
-                className="sheet__details--element-input"
-                defaultValue={char.level}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </div>
-  )
+function arrayRemove(arr, index) {
+  return [...arr.slice(0, index), ...arr.slice(index + 1)]
 }
 
+// hooks
 function useCheckbox(initialState, yes, no) {
   const [checked, setChecked] = useState(initialState)
   return [
@@ -215,9 +31,222 @@ function useCheckbox(initialState, yes, no) {
   ]
 }
 
-function Core({ char }) {
-  const [toggle, setToggle] = useState(true)
-  const [eyecon, setEyecon] = useState(true)
+function CharacterSheet() {
+  const [char, setCharDetails] = useState(null)
+  const navigate = useNavigate()
+  const params = useParams()
+
+  /* this is the reusable persist to db function */
+  /* note we pass it persit={persist} to all of the sub-sheets below */
+  const persist = useDebouncedCallback((data) => {
+    updateCharacter(char.id, data).catch(console.error)
+  }, 1000)
+
+  /* if the user navigates away or closes the character page before the persist runs,
+  we should wait for it to finish. this effect does exactly that. todo: read the
+  use-debounce docs for more information about that. */
+  useEffect(() => {
+    return () => persist.flush()
+  }, [persist])
+
+  /* fetch character data or go back to character list */
+  useEffect(() => {
+    getCharacter(params.id)
+      .then(setCharDetails)
+      .catch((err) => {
+        navigate("/")
+      })
+  }, [navigate, params.id])
+
+  return (
+    <div className="sheet">
+      <div className="sheet__card">
+        {char ? (
+          <>
+            {/* <pre>{JSON.stringify(char, null, 2)}</pre> */}
+            <CharDetails char={char} persist={persist} />
+            <Core char={char} persist={persist} />
+            <Abilities char={char} persist={persist} />
+            <WeaponsSpells char={char} persist={persist} />
+            <MiscData char={char} persist={persist} />
+          </>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default CharacterSheet
+
+function CharDetails({ char, persist }) {
+  const [name, setName] = useState(char.name)
+  const [exp, setExp] = useState(char.exp)
+  const [level, setLevel] = useState(char.level)
+
+  useEffect(() => {
+    persist({
+      name: name,
+      exp: exp,
+      level: level,
+    })
+  }, [
+    persist,
+    name,
+    exp,
+    level,
+  ]) /* run the effect any time one of these changes */
+
+  return (
+    <ToggleBox>
+      {
+        (visible) =>
+          visible ? (
+            <div className="sheet__details--container">
+              <div className="sheet__details--avatar-container">
+                {char.avatar ? (
+                  <img
+                    className="char-list__card--left-avatar"
+                    src={`http://localhost:8080/characters/${char.id}/avatar`}
+                    alt="avatar"
+                  />
+                ) : (
+                  <img
+                    className="char-list__card--left-avatar"
+                    src={logo}
+                    alt="avatar"
+                  />
+                )}
+              </div>
+              <div className="sheet__details--info">
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="char-name"
+                  >
+                    Name:
+                  </label>
+                  <input
+                    className="sheet__details--element-input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="char-race"
+                  >
+                    Race:
+                  </label>
+                  {/* todo: maybe use race <select> and use char.race.index as value */}
+                  <input
+                    className="sheet__details--element-input"
+                    value={char.race.name}
+                    disabled
+                  />
+                </div>
+
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="char-subrace"
+                  >
+                    Subrace:
+                  </label>
+                  {/* todo: maybe use subrace <select> and use char.subrace.index as value */}
+                  <input
+                    className="sheet__details--element-input"
+                    value={char.subrace?.name ?? ""}
+                    disabled
+                  />
+                </div>
+
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="char-class"
+                  >
+                    Class:
+                  </label>
+                  {/* todo: maybe use class <select> and use char.class.index as value */}
+                  <input
+                    className="sheet__details--element-input"
+                    value={char.class.name}
+                    disabled
+                  />
+                </div>
+
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="char-archetype"
+                  >
+                    Archetype:
+                  </label>
+                  {/* todo: maybe use archetype <select> and use char.archetype.index as value */}
+                  <input
+                    className="sheet__details--element-input"
+                    value={char.archetype?.name ?? ""}
+                    disabled
+                  />
+                </div>
+
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="char-background"
+                  >
+                    Background:
+                  </label>
+                  {/* todo: maybe use background <select> and use char.background.index as value */}
+                  <input
+                    className="sheet__details--element-input"
+                    value={char.background?.name ?? ""}
+                    disabled
+                  />
+                </div>
+
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="experience"
+                  >
+                    Experience:
+                  </label>
+                  <input
+                    className="sheet__details--element-input"
+                    value={exp}
+                    onChange={(e) => setExp(e.target.value)}
+                  />
+                </div>
+                <div className="sheet__details--element">
+                  <label
+                    className="sheet__details--element-title"
+                    htmlFor="level"
+                  >
+                    Level:
+                  </label>
+                  <input
+                    className="sheet__details--element-input"
+                    value={level}
+                    onChange={(e) => setLevel(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null /* todo: replace null with the "abbreviated" display of this sub sheet */
+      }
+    </ToggleBox>
+  )
+}
+
+function Core({ char, persist }) {
+  const [tempHp, setTempHp] = useState(char.temp_hp)
+  const [speed, setSpeed] = useState(char.speed)
+  const [hitdie, setHitdie] = useState(char.hitdie)
   const [_fail1, fail1button] = useCheckbox(false, "💀", "")
   const [_fail2, fail2button] = useCheckbox(false, "💀", "")
   const [_fail3, fail3button] = useCheckbox(false, "💀", "")
@@ -226,234 +255,221 @@ function Core({ char }) {
   const [_pass3, pass3button] = useCheckbox(false, "💚", "")
   const [_inspiration, inspirationButton] = useCheckbox(false, "💡", "")
 
-  return (
-    <div className="sheet__core">
-      {/* AC, initiative, speed, current hp, max hp, temp hp, hit dice, death saves,
-      proficiency bonus, inspiration go here */}
-      <h1 className="sheet__titles">Core</h1>
+  useEffect(() => {
+    persist({
+      temp_hp: tempHp,
+      speed: speed,
+      hitdie: hitdie,
+    })
+  }, [
+    persist,
+    tempHp,
+    speed,
+    hitdie,
+  ]) /* run persist any time one of these changes */
 
-      {eyecon ? (
-        <img
-          className="toggle"
-          src={eyeOpen}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      ) : (
-        <img
-          className="toggle"
-          src={eyeClose}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      )}
-      {toggle ? (
-        <div className="sheet__core--details">
-          <div className="sheet__core--health">
-            <div className="stat-block">
-              <label className="stat-block__label" htmlFor="current_hp">
-                Current HP
-              </label>
-              <input
-                className="stat-block__input Hp"
-                name="current_hp"
-                id="current_hp"
-                defaultValue={`${char.current_hp}/${char.max_hp}`}
-              />
-            </div>
-            <div className="stat-block">
-              <label className="stat-block__label" htmlFor="temp_hp">
-                Temp HP
-              </label>
-              <input
-                className="stat-block__input Hp"
-                name="temp_hp"
-                id="temp_hp"
-                defaultValue={char.temp_hp}
-              />
-            </div>
-            <div className="stat-block">
-              <label className="stat-block__label" htmlFor="hit_die">
-                Hit Die
-              </label>
-              <input
-                className="stat-block__input Hp"
-                name="hit_die"
-                id="hit_die"
-                defaultValue={`${1 * char.level}d${char.class.hit_die}`}
-              />
-            </div>
-            <div className="stat-block">
-              <h3 className="stat-block__label">Death Saves</h3>
-              <div className="death-saves">
-                <label htmlFor="death_passes" className="death-saves__title">
-                  Fail
-                </label>
-                {fail1button}
-                {fail2button}
-                {fail3button}
+  return (
+    <ToggleBox title="Core">
+      {
+        (visible) =>
+          visible ? (
+            <div className="sheet__core--details">
+              <div className="sheet__core--health">
+                <div className="stat-block">
+                  <label className="stat-block__label" htmlFor="current_hp">
+                    Current HP
+                  </label>
+                  {/* this is derived (computed) state and probably shouldn't allow change */}
+                  {/* maybe make current_hp and max_hp separate fields? */}
+                  <input
+                    className="stat-block__input Hp"
+                    name="current_hp"
+                    id="current_hp"
+                    defaultValue={`${char.current_hp}/${char.max_hp}`}
+                  />
+                </div>
+                <div className="stat-block">
+                  <label className="stat-block__label" htmlFor="temp_hp">
+                    Temp HP
+                  </label>
+                  <input
+                    className="stat-block__input Hp"
+                    name="temp_hp"
+                    id="temp_hp"
+                    value={tempHp}
+                    onChange={(e) => setTempHp(e.target.value)}
+                  />
+                </div>
+                <div className="stat-block">
+                  <label className="stat-block__label" htmlFor="hit_die">
+                    Hit Die
+                  </label>
+                  {/* this is derived (computed) state and should not be modified directly */}
+                  {/* maybe make this field disabled so it cannot be changed */}
+                  <input
+                    className="stat-block__input Hp"
+                    name="hit_die"
+                    id="hit_die"
+                    value={hitdie}
+                    onChange={(e) => setHitdie(e.target.value)}
+                  />
+                </div>
+                <div className="stat-block">
+                  <h3 className="stat-block__label">Death Saves</h3>
+                  <div className="death-saves">
+                    <label
+                      htmlFor="death_passes"
+                      className="death-saves__title"
+                    >
+                      Fail
+                    </label>
+                    {fail1button}
+                    {fail2button}
+                    {fail3button}
+                  </div>
+                  <div className="death-saves">
+                    <label
+                      htmlFor="death_passes"
+                      className="death-saves__title"
+                    >
+                      Pass
+                    </label>
+                    {pass1button}
+                    {pass2button}
+                    {pass3button}
+                  </div>
+                </div>
               </div>
-              <div className="death-saves">
-                <label htmlFor="death_passes" className="death-saves__title">
-                  Pass
-                </label>
-                {pass1button}
-                {pass2button}
-                {pass3button}
+              <div className="sheet__core--other">
+                <div className="stat-block">
+                  <label className="stat-block__label" htmlFor="initiative">
+                    Initiative
+                  </label>
+                  <input
+                    className="stat-block__input"
+                    id="initiative"
+                    defaultValue={0}
+                  />
+                </div>
+                <div className="stat-block">
+                  <label className="stat-block__label" htmlFor="inspiration">
+                    Inspiration
+                  </label>
+                  {inspirationButton}
+                </div>
+                <div className="stat-block">
+                  <label className="stat-block__label" htmlFor="speed">
+                    Speed
+                  </label>
+                  <input
+                    className="stat-block__input"
+                    id="speed"
+                    value={speed}
+                    onChange={(e) => setSpeed(e.target.value)}
+                  />
+                </div>
+                <div className="stat-block">
+                  <label className="stat-block__label" htmlFor="proficiency">
+                    Proficiency
+                  </label>
+                  {/* this is derived (computed) state and should not be modified directly */}
+                  {/* consider making this input disabled so it cannot be changed by the user */}
+                  <input
+                    className="stat-block__input"
+                    id="proficiency"
+                    defaultValue={`+${Math.ceil(2 + (0.25 * char.level - 1))}`}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="sheet__core--other">
-            <div className="stat-block">
-              <label className="stat-block__label" htmlFor="initiative">
-                Initiative
-              </label>
-              <input
-                className="stat-block__input"
-                id="initiative"
-                defaultValue={0}
-              />
-            </div>
-            <div className="stat-block">
-              <label className="stat-block__label" htmlFor="inspiration">
-                Inspiration
-              </label>
-              {inspirationButton}
-            </div>
-            <div className="stat-block">
-              <label className="stat-block__label" htmlFor="speed">
-                Speed
-              </label>
-              <input
-                className="stat-block__input"
-                id="speed"
-                defaultValue={char.speed}
-              />
-            </div>
-            <div className="stat-block">
-              <label className="stat-block__label" htmlFor="proficiency">
-                Proficiency
-              </label>
-              <input
-                className="stat-block__input"
-                id="proficiency"
-                defaultValue={`+${Math.ceil(2 + (0.25 * char.level - 1))}`}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </div>
+          ) : null /* todo: replace null with the "abbreviated" display of this sub sheet */
+      }
+    </ToggleBox>
   )
 }
 
-function Abilities({ char }) {
-  const [toggle, setToggle] = useState(true)
-  const [eyecon, setEyecon] = useState(true)
-
-  return (
-    <div className="sheet__abilities">
-      {/* ability scores, saving throws, skills, passive wisdom go here */}
-      <h1 className="sheet__titles">Abilities</h1>
-      {eyecon ? (
-        <img
-          className="toggle"
-          src={eyeOpen}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      ) : (
-        <img
-          className="toggle"
-          src={eyeClose}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      )}
-      {toggle ? (
-        <div className="sheet__abilities--details">
-          <div className="create__abilities">
-            <div className="create__abilities--hexes">
-              <Hexagon
-                label="STR"
-                ability={char.abi_str}
-                onChange={() => console.log("todo update: str")}
-              />
-              <Hexagon
-                label="DEX"
-                ability={char.abi_dex}
-                onChange={() => console.log("todo update: dex")}
-              />
-              <Hexagon
-                label="CON"
-                ability={char.abi_con}
-                onChange={() => console.log("todo update: con")}
-              />
-            </div>
-
-            <div className="create__abilities--hexes">
-              <Hexagon
-                label="INT"
-                ability={char.abi_int}
-                onChange={() => console.log("todo update: int")}
-              />
-              <Hexagon
-                label="WIS"
-                ability={char.abi_wis}
-                onChange={() => console.log("todo update: wis")}
-              />
-              <Hexagon
-                label="CHA"
-                ability={char.abi_cha}
-                onChange={() => console.log("todo update: cha")}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </div>
-  )
-}
-
-function WeaponsSpells({ char }) {
-  const [toggle, setToggle] = useState(true)
-  const [eyecon, setEyecon] = useState(true)
-  const [attacks, setAttacks] = useState(char.attacks)
-
-  const saveAttacksToDb = useDebouncedCallback((attacks) => {
-    updateCharacter(char.id, {
-      attacks: JSON.stringify(attacks),
-    }).catch(console.error)
-  }, 1000)
+function Abilities({ char, persist }) {
+  const [str, setStr] = useState(char.abi_str)
+  const [dex, setDex] = useState(char.abi_dex)
+  const [con, setCon] = useState(char.abi_con)
+  const [int, setInt] = useState(char.abi_int)
+  const [wis, setWis] = useState(char.abi_wis)
+  const [cha, setCha] = useState(char.abi_cha)
 
   useEffect(() => {
-    saveAttacksToDb(attacks)
-  }, [attacks, saveAttacksToDb])
+    persist({
+      abi_str: str,
+      abi_dex: dex,
+      abi_con: con,
+      abi_int: int,
+      abi_wis: wis,
+      abi_cha: cha,
+    })
+  }, [persist, str, dex, con, int, wis, cha])
+
+  return (
+    <ToggleBox>
+      {
+        (visible) =>
+          visible ? (
+            <div className="sheet__abilities--details">
+              <div className="create__abilities">
+                <div className="create__abilities--hexes">
+                  <Hexagon
+                    label="STR"
+                    ability={str}
+                    onChange={(e) => setStr(e.target.value)}
+                  />
+                  <Hexagon
+                    label="DEX"
+                    ability={dex}
+                    onChange={(e) => setDex(e.target.value)}
+                  />
+                  <Hexagon
+                    label="CON"
+                    ability={con}
+                    onChange={(e) => setCon(e.target.value)}
+                  />
+                </div>
+
+                <div className="create__abilities--hexes">
+                  <Hexagon
+                    label="INT"
+                    ability={int}
+                    onChange={(e) => setInt(e.target.value)}
+                  />
+                  <Hexagon
+                    label="WIS"
+                    ability={wis}
+                    onChange={(e) => setWis(e.target.value)}
+                  />
+                  <Hexagon
+                    label="CHA"
+                    ability={cha}
+                    onChange={(e) => setCha(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null /* todo: replace null with the "abbreviated" display of this sub sheet */
+      }
+    </ToggleBox>
+  )
+}
+
+function WeaponsSpells({ char, persist }) {
+  const [attacks, setAttacks] = useState(char.attacks)
+
+  useEffect(() => {
+    persist({
+      attacks: JSON.stringify(attacks),
+    })
+  }, [persist, attacks])
 
   const emptyAttack = {
     name: "",
     bonus: "",
     damage: "",
-  }
-
-  function arrayUpdate(arr, index, func) {
-    return [...arr.slice(0, index), func(arr[index]), ...arr.slice(index + 1)]
-  }
-
-  function arrayRemove(arr, index) {
-    return [...arr.slice(0, index), ...arr.slice(index + 1)]
   }
 
   function addAttack(e) {
@@ -479,79 +495,63 @@ function WeaponsSpells({ char }) {
   }
 
   return (
-    <div className="sheet__wep-spells">
-      {/* weapons and spells go here */}
-      <h1 className="sheet__titles">Weapons and Spells</h1>
-      {eyecon ? (
-        <img
-          className="toggle"
-          src={eyeOpen}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      ) : (
-        <img
-          className="toggle"
-          src={eyeClose}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      )}
-      {toggle ? (
-        <>
-          <div className="sheet__attacks">
-            <div className="sheet__attacks--header">
-              <div className="sheet__attacks--header-cell">Name</div>
-              <div className="sheet__attacks--header-cell">Atk bonus</div>
-              <div className="sheet__attacks--header-cell">Damage/Type</div>
-              <div className="sheet__attacks--header-cell"></div>
-            </div>
-            {attacks.map((a, index) => (
-              <div key={index} className="sheet__attacks--row">
-                <div className="sheet__attacks--row-cell">
-                  <input value={a.name} onChange={setAttack(index, "name")} />
+    <ToggleBox title="Weapons and Spells">
+      {
+        (visible) =>
+          visible ? (
+            <>
+              <div className="sheet__attacks">
+                <div className="sheet__attacks--header">
+                  <div className="sheet__attacks--header-cell">Name</div>
+                  <div className="sheet__attacks--header-cell">Atk bonus</div>
+                  <div className="sheet__attacks--header-cell">Damage/Type</div>
+                  <div className="sheet__attacks--header-cell"></div>
                 </div>
-                <div className="sheet__attacks--row-cell">
-                  <input value={a.bonus} onChange={setAttack(index, "bonus")} />
-                </div>
-                <div className="sheet__attacks--row-cell">
-                  <input
-                    value={a.damage}
-                    onChange={setAttack(index, "damage")}
-                  />
-                </div>
-                <div className="sheet__attacks--row-cell">
-                  <button
-                    type="button"
-                    className="sheet__attacks--remove"
-                    onClick={removeAttack(index)}
-                    children="X"
-                  />
-                </div>
+                {attacks.map((a, index) => (
+                  <div key={index} className="sheet__attacks--row">
+                    <div className="sheet__attacks--row-cell">
+                      <input
+                        value={a.name}
+                        onChange={setAttack(index, "name")}
+                      />
+                    </div>
+                    <div className="sheet__attacks--row-cell">
+                      <input
+                        value={a.bonus}
+                        onChange={setAttack(index, "bonus")}
+                      />
+                    </div>
+                    <div className="sheet__attacks--row-cell">
+                      <input
+                        value={a.damage}
+                        onChange={setAttack(index, "damage")}
+                      />
+                    </div>
+                    <div className="sheet__attacks--row-cell">
+                      <button
+                        type="button"
+                        className="sheet__attacks--remove"
+                        onClick={removeAttack(index)}
+                        children="X"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="sheet__attacks--add"
-            onClick={addAttack}
-            children="+"
-          />
-        </>
-      ) : null}
-    </div>
+              <button
+                type="button"
+                className="sheet__attacks--add"
+                onClick={addAttack}
+                children="+"
+              />
+            </>
+          ) : null /* todo: replace null with the "abbreviated" display of this sub sheet */
+      }
+    </ToggleBox>
   )
 }
 
-function MiscData({ char }) {
-  const [toggle, setToggle] = useState(true)
-  const [eyecon, setEyecon] = useState(true)
+function MiscData({ char, persist }) {
   const [equipment, setEquipment] = useState(char.equipment.join("\n"))
   const [proficiencies, setProficiencies] = useState(
     char.proficiencies.join("\n")
@@ -561,117 +561,103 @@ function MiscData({ char }) {
   const [notes, setNotes] = useState(char.notes)
   // const [locked, setLocked] = useState(false)
 
-  const saveMiscToDb = useDebouncedCallback((data) => {
-    // setLocked(true)
-    updateCharacter(char.id, {
-      equipment: JSON.stringify(data.equipment.split("\n")),
-      proficiencies: JSON.stringify(data.proficiencies.split("\n")),
-      traits: JSON.stringify(data.traits.split("\n")),
-      languages: JSON.stringify(data.languages.split("\n")),
-      notes: data.notes,
-    }).catch(console.error)
-    // .finally(() => setLocked(false))
-  }, 1000)
-
   useEffect(() => {
-    saveMiscToDb({
-      equipment,
-      proficiencies,
-      traits,
-      languages,
-      notes,
+    persist({
+      equipment: JSON.stringify(equipment.split("\n")),
+      proficiencies: JSON.stringify(proficiencies.split("\n")),
+      traits: JSON.stringify(traits.split("\n")),
+      languages: JSON.stringify(languages.split("\n")),
+      notes: notes,
     })
-  }, [equipment, languages, notes, proficiencies, saveMiscToDb, traits])
+  }, [persist, equipment, languages, notes, proficiencies, traits])
 
   return (
-    <div className="sheet__misc">
-      {/* features, proficiencies, languages, equipment list, personality etc. go
-      here */}
-      <h1 className="sheet__titles">Misc</h1>
-      {eyecon ? (
-        <img
-          className="toggle"
-          src={eyeOpen}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      ) : (
-        <img
-          className="toggle"
-          src={eyeClose}
-          alt="eyecon"
-          onClick={() => {
-            setToggle(!toggle)
-            setEyecon(!eyecon)
-          }}
-        />
-      )}
-      {toggle ? (
-        <div>
-          <div className="sheet__misc--info">
-            <div className="sheet__misc--lists">
-              <label className="sheet__misc--label">Equipment</label>
-              <textarea
-                name="equipment"
-                className="sheet__misc--textarea"
-                id="misc-equipment"
-                cols="30"
-                rows="10"
-                onChange={(e) => setEquipment(e.target.value)}
-                value={equipment}
-              />
-              <label className="sheet__misc--label">Proficiencies</label>
-              <textarea
-                name="proficiencies"
-                className="sheet__misc--textarea"
-                id="misc-proficiencies"
-                cols="30"
-                rows="10"
-                onChange={(e) => setProficiencies(e.target.value)}
-                value={proficiencies}
-              />
-              <label className="sheet__misc--label">Languages</label>
-              <textarea
-                name="languages"
-                className="sheet__misc--textarea"
-                id="misc-languages"
-                cols="30"
-                rows="10"
-                onChange={(e) => setLanguages(e.target.value)}
-                value={languages}
-              />
+    <ToggleBox title="Misc">
+      {
+        (visible) =>
+          visible ? (
+            <div>
+              <div className="sheet__misc--info">
+                <div className="sheet__misc--lists">
+                  <label className="sheet__misc--label">Equipment</label>
+                  <textarea
+                    name="equipment"
+                    className="sheet__misc--textarea"
+                    id="misc-equipment"
+                    cols="30"
+                    rows="10"
+                    onChange={(e) => setEquipment(e.target.value)}
+                    value={equipment}
+                  />
+                  <label className="sheet__misc--label">Proficiencies</label>
+                  <textarea
+                    name="proficiencies"
+                    className="sheet__misc--textarea"
+                    id="misc-proficiencies"
+                    cols="30"
+                    rows="10"
+                    onChange={(e) => setProficiencies(e.target.value)}
+                    value={proficiencies}
+                  />
+                  <label className="sheet__misc--label">Languages</label>
+                  <textarea
+                    name="languages"
+                    className="sheet__misc--textarea"
+                    id="misc-languages"
+                    cols="30"
+                    rows="10"
+                    onChange={(e) => setLanguages(e.target.value)}
+                    value={languages}
+                  />
 
-              <label className="sheet__misc--label">Traits</label>
-              <textarea
-                name="traits"
-                className="sheet__misc--textarea"
-                id="miscTraits"
-                cols="30"
-                rows="10"
-                onChange={(e) => setTraits(e.target.value)}
-                value={traits}
-              />
+                  <label className="sheet__misc--label">Traits</label>
+                  <textarea
+                    name="traits"
+                    className="sheet__misc--textarea"
+                    id="miscTraits"
+                    cols="30"
+                    rows="10"
+                    onChange={(e) => setTraits(e.target.value)}
+                    value={traits}
+                  />
+                </div>
+                <div className="sheet__notes">
+                  <label className="sheet__notes--label" htmlFor="notes">
+                    Notes
+                  </label>
+                  <textarea
+                    className="sheet__notes--textarea"
+                    name="notes"
+                    id="notes"
+                    cols="30"
+                    rows="10"
+                    onChange={(e) => setNotes(e.target.value)}
+                    value={notes}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="sheet__notes">
-              <label className="sheet__notes--label" htmlFor="notes">
-                Notes
-              </label>
-              <textarea
-                className="sheet__notes--textarea"
-                name="notes"
-                id="notes"
-                cols="30"
-                rows="10"
-                onChange={(e) => setNotes(e.target.value)}
-                value={notes}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
+          ) : null /* todo: replace null with the "abbreviated" display of this sub sheet */
+      }
+    </ToggleBox>
+  )
+}
+
+/* this is the reusable ToggleBox component */
+function ToggleBox({ title, init = true, children }) {
+  const [open, setOpen] =
+    useState(init) /* state management is localized to the reusable component */
+  return (
+    <div className="sheet__details">
+      <h1 className="sheet__titles">Character</h1>
+      <div className="toggle" onClick={() => setOpen(!open)}>
+        { open
+        ? <EyeOpen />
+        : <EyeClose />
+        }
+      </div>
+      {children(open)}{" "}
+      {/* calling children as a function is a "render prop", see react docs */}
     </div>
   )
 }
