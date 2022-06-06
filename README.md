@@ -15,14 +15,16 @@ There are additional features I wanted to add including more subraces, classes, 
 
 To run this project, you must first start the express server and setup the database,
 
+
 ```sh
-$ Open MySQL and create a new scheme called dnd
+$ Open MySQL and create a new scheme called dnd 
 
 ```
 
 ```sh
 $ cd server
 $ npm i
+$ docker-compose up -d // This is for Docker setup only
 $ knex migrate:latest
 $ npm start
 ```
