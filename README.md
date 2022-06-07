@@ -11,9 +11,9 @@ There are additional features I wanted to add including more subraces, classes, 
 ![charlist](https://user-images.githubusercontent.com/90243125/152275503-c408ced3-3545-4efb-b0a7-39414b757350.PNG)
 
 ![chardeets](https://user-images.githubusercontent.com/90243125/152275506-7043ace7-8a98-47d6-8562-960d9744af66.PNG)
-![charsignup)](https://user-images.githubusercontent.com/90243125/172281636-7fe52633-6deb-4bbb-b602-f673438f5485.png)
-![charlogin) (1)](https://user-images.githubusercontent.com/90243125/172281644-86793a0b-0ab3-440b-9e4e-93afa4146e65.png)
-![charcreate) (2)](https://user-images.githubusercontent.com/90243125/172281649-e019435d-6bde-44f8-bf5c-c45f16e6b26d.png)
+![charcreate](https://user-images.githubusercontent.com/90243125/172281636-7fe52633-6deb-4bbb-b602-f673438f5485.png)
+![charlogin](https://user-images.githubusercontent.com/90243125/172281644-86793a0b-0ab3-440b-9e4e-93afa4146e65.png)
+![charsignup](https://user-images.githubusercontent.com/90243125/172281649-e019435d-6bde-44f8-bf5c-c45f16e6b26d.png)
 
 
 To run this project, you must first start the express server and setup the database,
